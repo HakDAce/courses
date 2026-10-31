@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Courses</title>
+<meta name="theme-color" content="#b4690e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Courses">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Même identité que Budget Foyer ; accent ambré pour distinguer l'appli */
+:root{
+  --bg:#f3f5f4; --surface:#ffffff; --line:#dfe5e2; --fg:#16231f; --muted:#5f6f69;
+  --accent:#1f5f4f; --accent-fg:#ffffff; --accent-soft:#e1eeea;
+  --amber:#b4690e; --amber-soft:#f7ead8; --danger:#b3261e; --danger-soft:#fbe4e2; --pos:#2f7d3c; --pos-soft:#e2f1e4;
+  --display:"Sora",ui-sans-serif,system-ui,sans-serif;
+  --body:"Figtree",ui-sans-serif,system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0f1513; --surface:#18201d; --line:#2a3531; --fg:#e7eeeb; --muted:#9aaba4;
+  --accent:#5fb89f; --accent-fg:#0b1512; --accent-soft:#1d3a32;
+  --amber:#e6a456; --amber-soft:#3a2b17; --danger:#f08a80; --danger-soft:#3d1f1c; --pos:#7fcf8f; --pos-soft:#1c3522;
+  color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:520px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:env(safe-area-inset-top,0px) calc(90px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px}
+.page{display:flex;flex-direction:column;gap:16px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
+h2{font-family:var(--display);font-size:15px;font-weight:600;margin:0;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums;text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:8px 13px;font:500 14px var(--body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.chip.dash{border-style:dashed;color:var(--muted);background:transparent}
+.sugg .chip{padding:6px 11px;font-size:13px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;border-radius:9px;padding:10px;background:transparent;color:var(--muted);font:600 14px var(--body);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.field{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--surface);color:var(--fg);font:16px var(--body);width:100%;min-width:0}
+textarea.field{resize:vertical;line-height:1.5}
+.add{border:0;border-radius:12px;padding:14px;background:var(--accent);color:var(--accent-fg);font:600 16px var(--body);cursor:pointer}
+.add.sm{padding:0 18px;font-size:22px;line-height:1}
+.ghost{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:12px;padding:14px;font:600 15px var(--body);cursor:pointer}
+.link{background:none;border:0;color:var(--muted);font:500 13px var(--body);text-decoration:underline;cursor:pointer;align-self:center;padding:6px}
+.link.danger{color:var(--danger)}
+.note{font-size:13px;color:var(--muted);margin:0}
+.empty{color:var(--muted);font-size:14px;margin:0}
+.status{text-align:center;color:var(--muted);font-size:13px;margin:0}
+.storebar{display:flex;flex-direction:column;gap:8px}
+.inline,.addbar{display:grid;grid-template-columns:1fr auto;gap:8px}
+.inline .add{padding:0 16px;font-size:15px}
+/* lignes de la liste */
+.list{display:flex;flex-direction:column}
+.it{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding-block:10px;border-top:1px solid var(--line)}
+.it:first-child{border-top:0}
+.ck{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;padding:0}
+.done .ck{background:var(--accent);border-color:var(--accent)}
+.done .ck::after{content:"";width:6px;height:11px;border:solid var(--accent-fg);border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.it .t{min-width:0;cursor:pointer}
+.it .t div{overflow-wrap:anywhere}
+.it .t small{color:var(--muted);font-size:12px;display:block}
+.done .t div{text-decoration:line-through;color:var(--muted)}
+.pr{border:1px solid var(--line);background:transparent;color:var(--fg);border-radius:999px;padding:6px 10px;font:600 13px var(--body);font-variant-numeric:tabular-nums;cursor:pointer;white-space:nowrap}
+.pr.none{border-style:dashed;color:var(--muted);font-weight:500}
+/* comparateur */
+.cmp{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;padding-block:6px;font-variant-numeric:tabular-nums}
+.cmp .cov{font-size:12px;color:var(--muted)}
+.cmp .v{font-weight:600;text-align:right;min-width:84px}
+.cmp.cur span:first-child{font-weight:600}
+.verdict{background:var(--pos-soft);color:var(--fg);border-radius:10px;padding:10px 12px;font-size:14px;margin:0}
+.verdict b{color:var(--pos)}
+/* menus */
+.weeknav{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.weeknav h2{flex:1;justify-content:center;font-size:16px}
+.nav{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:18px;cursor:pointer;display:grid;place-items:center}
+.day{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:12px 0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--fg);font:15px var(--body);text-align:left;cursor:pointer;width:100%}
+.day:first-child{border-top:0}
+.day .dn{font-weight:600;text-transform:capitalize;display:flex;flex-direction:column;line-height:1.2}
+.day .dn small{font-weight:500;color:var(--muted);font-size:12px}
+.day.today .dn{color:var(--amber)}
+.day .dv{min-width:0;overflow-wrap:anywhere}
+.day .dv.none{color:var(--muted)}
+.day .di{font-size:12px;color:var(--muted);white-space:nowrap}
+/* plats */
+.pl{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border:0;border-top:1px solid var(--line);background:transparent;color:var(--fg);font:500 15px var(--body);text-align:left;cursor:pointer;width:100%}
+.pl:first-child{border-top:0}
+.pl small{color:var(--muted);white-space:nowrap}
+/* fenêtre du bas */
+.overlay{position:fixed;inset:0;background:rgb(0 0 0 / .5);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding-top:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px;max-height:88vh;overflow:auto}
+.sheet h3{font-family:var(--display);margin:0;font-size:18px;overflow-wrap:anywhere}
+.btns{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.btns.one{grid-template-columns:1fr}
+.amount{display:flex;align-items:baseline;gap:6px;border-bottom:2px solid var(--line);padding-bottom:6px}
+.amount:focus-within{border-color:var(--accent)}
+.amount input{flex:1;min-width:0;border:0;background:transparent;color:var(--fg);font-family:var(--display);font-size:30px;font-weight:600;font-variant-numeric:tabular-nums;padding:0;outline:none}
+.amount span{font-family:var(--display);font-size:22px;color:var(--muted)}
+.prow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;padding-block:8px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.prow:first-child{border-top:0}
+.prow small{color:var(--muted);font-size:12px}
+.prow.cur span:first-child{font-weight:600}
+.pill{font-size:11px;font-weight:600;color:var(--pos);background:var(--pos-soft);border-radius:999px;padding:2px 8px;margin-left:4px;white-space:nowrap}
+.chk{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding-block:9px;border-top:1px solid var(--line);cursor:pointer}
+.chk:first-child{border-top:0}
+.chk input{width:20px;height:20px;accent-color:var(--accent)}
+.chk .t{display:flex;flex-direction:column;min-width:0}
+.chk small{color:var(--muted);font-size:12px}
+.chk.off{opacity:.55}
+.toggle{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:14px;cursor:pointer}
+.toggle input{width:20px;height:20px;accent-color:var(--accent);margin:0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;max-width:calc(100% - 32px);box-shadow:0 6px 20px rgb(0 0 0 / .2)}
+.toast.err{background:var(--danger);color:#fff}
+.login{min-height:80vh;justify-content:center}
+.login h1{font-family:var(--display);font-size:28px;margin:0}
+.msg{font-size:13px;color:var(--muted);min-height:18px;margin:0}
+.msg.err{color:var(--danger)}
+</style>
+</head>
+<body>
+
+<div class="wrap login" id="loginView" hidden>
+  <h1>Courses</h1>
+  <form class="card" id="loginForm">
+    <input class="field" id="email" type="email" autocomplete="username" placeholder="E-mail" required>
+    <input class="field" id="pwd" type="password" autocomplete="current-password" placeholder="Mot de passe" required>
+    <button class="add" type="submit">Se connecter</button>
+    <p class="msg" id="loginMsg"></p>
+  </form>
+</div>
+
+<div class="wrap" id="appView" hidden>
+  <header class="top">
+    <div class="seg" id="tabSeg" role="tablist" aria-label="Page">
+      <button type="button" data-p="liste" aria-pressed="true">Liste</button>
+      <button type="button" data-p="menus" aria-pressed="false">Menus</button>
+      <button type="button" data-p="plats" aria-pressed="false">Plats</button>
+    </div>
+  </header>
+
+  <!-- LISTE -->
+  <div class="page" id="p-liste">
+    <section class="storebar">
+      <span class="lbl">Je suis chez</span>
+      <div class="chips" id="stores"></div>
+      <form class="inline" id="storeForm" hidden autocomplete="off">
+        <input class="field" id="storeName" placeholder="Nom du magasin (ex. Carrefour)">
+        <button class="add" type="submit">Ajouter</button>
+      </form>
+    </section>
+
+    <form class="addbar" id="addForm" autocomplete="off">
+      <input class="field" id="addName" list="dl" placeholder="Ajouter un article (ex. Lait)" autocapitalize="sentences" enterkeyhint="done" aria-label="Article à ajouter">
+      <button class="add sm" type="submit" aria-label="Ajouter l'article">+</button>
+    </form>
+    <datalist id="dl"></datalist>
+    <div class="chips sugg" id="often" hidden></div>
+
+    <section class="card" id="cmpCard" hidden>
+      <h2>Comparateur <small id="cmpSub"></small></h2>
+      <div id="cmp"></div>
+      <p class="note" id="cmpNote"></p>
+    </section>
+
+    <section class="card">
+      <h2>À acheter <small id="todoCount"></small></h2>
+      <div class="list" id="todo"></div>
+    </section>
+
+    <section class="card" id="cartCard" hidden>
+      <h2>Dans le panier <small id="cartSum"></small></h2>
+      <div class="list" id="cart"></div>
+      <button class="add" id="finishBtn" type="button">Terminer les courses</button>
+    </section>
+  </div>
+
+  <!-- MENUS -->
+  <div class="page" id="p-menus" hidden>
+    <div class="weeknav">
+      <button class="nav" id="wPrev" type="button" aria-label="Semaine précédente">‹</button>
+      <h2 id="wLbl">—</h2>
+      <button class="nav" id="wNext" type="button" aria-label="Semaine suivante">›</button>
+    </div>
+    <section class="card"><div class="list" id="days"></div></section>
+    <button class="add" id="prepBtn" type="button">Préparer les courses de la semaine</button>
+  </div>
+
+  <!-- PLATS -->
+  <div class="page" id="p-plats" hidden>
+    <button class="add" id="newPlat" type="button">+ Nouveau plat</button>
+    <section class="card"><div class="list" id="plats"></div></section>
+  </div>
+
+  <p class="status" id="status">Chargement…</p>
+  <button class="link" id="logout" type="button">Se déconnecter</button>
+</div>
+
+<div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<p class="status" id="configMsg" hidden style="padding:40px 16px">Configuration manquante : le fichier config.js est vide.</p>
+
+<script src="config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+
+// --- Démarrage Firebase (même projet que Budget Foyer) ---
+const cfg=window.FIREBASE_CONFIG||{};
+if(!cfg.apiKey||cfg.apiKey.startsWith("COLLE")){ $("configMsg").hidden=false; throw new Error("config manquante"); }
+firebase.initializeApp(cfg);
+const auth=firebase.auth(), fs=firebase.firestore(), FV=firebase.firestore.FieldValue;
+fs.enablePersistence({synchronizeTabs:true}).catch(()=>{});
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+$("loginForm").onsubmit=async e=>{
+  e.preventDefault(); $("loginMsg").textContent="Connexion…"; $("loginMsg").className="msg";
+  try{ await auth.signInWithEmailAndPassword($("email").value.trim(),$("pwd").value); }
+  catch(err){ $("loginMsg").className="msg err";
+    $("loginMsg").textContent=/invalid|wrong|not-found|credential/.test(err.code||"")?"E-mail ou mot de passe incorrect.":"Connexion impossible : "+(err.message||err.code); }
+};
+$("logout").onclick=()=>auth.signOut();
+
+// --- Outils ---
+const ls={get:(k,d)=>{try{return localStorage.getItem(k)??d}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const BASE_STORES=["Lidl","Aldi","Intermarché","Leclerc"];
+const fmt=c=>(c/100).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+const euros=c=>(c/100).toLocaleString("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:false});
+const parseCents=v=>{const n=parseFloat(String(v??"").replace(/[\s  €]/g,"").replace(",","."));return isFinite(n)&&n>0?Math.round(n*100):0};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// même article quelle que soit l'écriture : « Lait demi-écrémé » = « lait demi ecreme »
+const keyOf=s=>String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/œ/g,"oe").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")||"article";
+const pad=n=>String(n).padStart(2,"0");
+const localDate=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const ym=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}`;
+const weekStart=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());x.setDate(x.getDate()-((x.getDay()+6)%7));return x};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const shortDate=s=>s?new Date(s+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short"}):"";
+const plural=(n,w)=>`${n} ${w}${n>1?"s":""}`;
+
+let items=[], produits={}, plats=[], menus={}, extraStores=[];
+let store=ls.get("courses.magasin","Lidl"), tab="liste", week=weekStart(new Date());
+const allStores=()=>[...BASE_STORES,...extraStores.filter(s=>!BASE_STORES.includes(s))];
+const priceOf=(key,s)=>produits[key]?.prix?.[s]||null; // {c: centimes, d: date}
+
+let toastT;
+function toast(t,err){const el=$("toast");el.textContent=t;el.className="toast"+(err?" err":"");el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2800)}
+const fail=what=>err=>toast(`${what} impossible : ${err.code==="permission-denied"?"accès refusé (règles Firestore).":(err.message||err.code)}`,true);
+
+// --- Fenêtre du bas ---
+let sheetSave=null;
+function openSheet(html,onSave){$("sheet").innerHTML=html;sheetSave=onSave||null;$("overlay").hidden=false}
+function closeSheet(){$("overlay").hidden=true;$("sheet").innerHTML="";sheetSave=null}
+$("overlay").onclick=e=>{ if(e.target===$("overlay")||e.target.closest("[data-close]")) closeSheet();
+  else if(e.target.closest("[data-save]")&&sheetSave) sheetSave(); };
+
+// --- Onglets ---
+function setTab(t){tab=t;
+  $("tabSeg").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.p===t));
+  ["liste","menus","plats"].forEach(p=>$("p-"+p).hidden=p!==t); render(); window.scrollTo(0,0)}
+$("tabSeg").onclick=e=>{const b=e.target.closest("button");if(b)setTab(b.dataset.p)};
+
+// --- Magasins ---
+function renderStores(){
+  $("stores").innerHTML=allStores().map(s=>`<button type="button" class="chip" data-s="${esc(s)}" aria-pressed="${s===store}">${esc(s)}</button>`).join("")
+    +`<button type="button" class="chip dash" data-s="__new">+ Autre</button>`;
+}
+$("stores").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;
+  if(b.dataset.s==="__new"){$("storeForm").hidden=!$("storeForm").hidden;if(!$("storeForm").hidden)$("storeName").focus();return}
+  store=b.dataset.s;ls.set("courses.magasin",store);render()};
+$("storeForm").onsubmit=e=>{e.preventDefault();const s=$("storeName").value.trim();if(!s)return;
+  if(!allStores().includes(s)){ fs.collection("reglages").doc("courses").set({magasins:FV.arrayUnion(s)},{merge:true}).catch(fail("Ajout du magasin")); extraStores=[...extraStores,s]; }
+  store=s;ls.set("courses.magasin",s);$("storeName").value="";$("storeForm").hidden=true;render()};
+
+// --- Liste ---
+function addItem(nom,pour){
+  nom=String(nom||"").trim(); if(!nom) return "vide";
+  const key=keyOf(nom), ex=items.find(i=>i.key===key);
+  if(ex){ if(ex.coche){fs.collection("courses").doc(ex.id).update({coche:false}).catch(fail("Mise à jour"));return "remis"} return "deja"; }
+  fs.collection("courses").add({nom:produits[key]?.nom||nom,key,coche:false,pour:pour||null,t:Date.now()}).catch(fail("Ajout"));
+  return "ok";
+}
+$("addForm").onsubmit=e=>{e.preventDefault();const v=$("addName").value.trim();if(!v)return;const r=addItem(v);
+  if(r==="deja")toast(`${v} est déjà sur la liste.`);else if(r==="remis")toast(`${v} remis dans « À acheter ».`);
+  $("addName").value=""};
+
+function renderOften(){
+  const onList=new Set(items.map(i=>i.key));
+  const top=Object.entries(produits).filter(([k,p])=>(p.achats||0)>0&&!onList.has(k)).sort((a,b)=>(b[1].achats||0)-(a[1].achats||0)).slice(0,8);
+  $("often").hidden=!top.length;
+  $("often").innerHTML=top.length?`<span class="lbl" style="width:100%">Souvent achetés</span>`+top.map(([,p])=>`<button type="button" class="chip" data-n="${esc(p.nom)}">+ ${esc(p.nom)}</button>`).join(""):"";
+  $("dl").innerHTML=Object.values(produits).map(p=>`<option value="${esc(p.nom)}"></option>`).join("");
+}
+$("often").onclick=e=>{const b=e.target.closest(".chip");if(b)addItem(b.dataset.n)};
+
+function rowHtml(i){
+  const p=priceOf(i.key,store);
+  return `<div class="it${i.coche?" done":""}" data-id="${i.id}">
+    <button type="button" class="ck" data-act="toggle" aria-label="${i.coche?"Remettre":"Cocher"} ${esc(i.nom)}"></button>
+    <div class="t" data-act="toggle"><div>${esc(i.nom)}</div>${i.pour?`<small>pour ${esc(i.pour)}</small>`:""}</div>
+    <button type="button" class="pr${p?"":" none"}" data-act="fiche" aria-label="Prix de ${esc(i.nom)}">${p?fmt(p.c):"+ prix"}</button></div>`;
+}
+function renderList(){
+  const todo=items.filter(i=>!i.coche).sort((a,b)=>(a.t||0)-(b.t||0));
+  const cart=items.filter(i=>i.coche).sort((a,b)=>(a.tc||0)-(b.tc||0));
+  $("todoCount").textContent=todo.length?plural(todo.length,"article"):"";
+  $("todo").innerHTML=todo.length?todo.map(rowHtml).join("")
+    :`<p class="empty">${cart.length?"Tout est dans le panier.":"Ta liste est vide. Ajoute un article ci-dessus, ou prépare les courses depuis l'onglet Menus."}</p>`;
+  $("cartCard").hidden=!cart.length;
+  $("cart").innerHTML=cart.map(rowHtml).join("");
+  const known=cart.filter(i=>priceOf(i.key,store)), sum=known.reduce((s,i)=>s+priceOf(i.key,store).c,0);
+  $("cartSum").textContent=`≈ ${fmt(sum)} · ${known.length}/${cart.length} prix`;
+  renderCompare();
+}
+const onListClick=e=>{const a=e.target.closest("[data-act]");if(!a)return;const row=a.closest(".it");const i=items.find(x=>x.id===row.dataset.id);if(!i)return;
+  if(a.dataset.act==="toggle") fs.collection("courses").doc(i.id).update(i.coche?{coche:false}:{coche:true,tc:Date.now()}).catch(fail("Mise à jour"));
+  else openFiche(i)};
+$("todo").onclick=onListClick; $("cart").onclick=onListClick;
+
+// Comparateur : total estimé de la liste dans chaque magasin + comparaison à panier égal
+function renderCompare(){
+  const list=items;
+  const rows=allStores().map(s=>{const k=list.filter(i=>priceOf(i.key,s));return {s,n:k.length,total:k.reduce((a,i)=>a+priceOf(i.key,s).c,0)}}).filter(r=>r.n>0);
+  $("cmpCard").hidden=!list.length||!rows.length; if($("cmpCard").hidden) return;
+  rows.sort((a,b)=>b.n-a.n||a.total-b.total);
+  $("cmpSub").textContent=`pour ${plural(list.length,"article")}`;
+  $("cmp").innerHTML=rows.map(r=>`<div class="cmp${r.s===store?" cur":""}"><span>${esc(r.s)}</span><span class="cov">${r.n}/${list.length} prix</span><span class="v">≈ ${fmt(r.total)}</span></div>`).join("");
+  let note="", verdict="";
+  if(rows.length===1) note=`Prix connus seulement chez ${rows[0].s} pour l'instant. Note les prix dans d'autres magasins pour comparer.`;
+  else{
+    let ss=rows.map(r=>r.s), common=list.filter(i=>ss.every(s=>priceOf(i.key,s)));
+    if(common.length<3&&ss.length>2){ ss=ss.slice(0,2); common=list.filter(i=>ss.every(s=>priceOf(i.key,s))); }
+    if(common.length>=3){
+      const t=ss.map(s=>({s,v:common.reduce((a,i)=>a+priceOf(i.key,s).c,0)})).sort((a,b)=>a.v-b.v);
+      const best=t[0], worst=t[t.length-1];
+      verdict=best.v===worst.v?`À panier égal (${common.length} produits), même prix partout.`
+        :`À panier égal (${common.length} produits connus partout), <b>${esc(best.s)}</b> est le moins cher : ${fmt(worst.v-best.v)} de moins que ${esc(worst.s)}.`;
+    }else note="Pas encore assez de produits avec un prix dans plusieurs magasins pour comparer de façon fiable.";
+  }
+  $("cmpNote").outerHTML=verdict?`<p class="verdict" id="cmpNote">${verdict}</p>`:`<p class="note" id="cmpNote">${esc(note)}</p>`;
+}
+
+// Fiche produit : prix dans le magasin actuel + prix ailleurs
+function openFiche(i){
+  const key=i.key, cur=priceOf(key,store);
+  const others=allStores().map(s=>({s,v:priceOf(key,s)})).filter(x=>x.v).sort((a,b)=>a.v.c-b.v.c);
+  const min=others.length>1?others[0].v.c:null;
+  openSheet(`<h3>${esc(i.nom)}</h3>
+    ${i.pour?`<p class="note">Pour ${esc(i.pour)}</p>`:""}
+    <span class="lbl">Prix chez ${esc(store)}</span>
+    <label class="amount" for="fPrice"><input id="fPrice" inputmode="decimal" placeholder="0,00" value="${cur?euros(cur.c):""}" aria-label="Prix"><span>€</span></label>
+    ${cur?`<p class="note">Dernier prix noté le ${shortDate(cur.d)}.</p>`:""}
+    ${others.length?`<span class="lbl">Prix connus</span><div>${others.map(x=>`<div class="prow${x.s===store?" cur":""}"><span>${esc(x.s)}${x.v.c===min?'<span class="pill">le moins cher</span>':""}</span><span>${fmt(x.v.c)}</span><small>${shortDate(x.v.d)}</small></div>`).join("")}</div>`
+      :`<p class="note">Aucun prix noté pour ce produit.</p>`}
+    <div class="btns"><button type="button" class="ghost" data-close>Fermer</button><button type="button" class="add" data-save>Enregistrer le prix</button></div>
+    <button type="button" class="link danger" id="fDel">Retirer de la liste</button>`,
+  ()=>{const c=parseCents($("fPrice").value); if(!c){toast("Saisis un prix valide.",true);return}
+    fs.collection("produits").doc(key).set({nom:produits[key]?.nom||i.nom,prix:{[store]:{c,d:localDate(new Date())}}},{merge:true}).catch(fail("Enregistrement du prix"));
+    closeSheet(); toast(`${i.nom} : ${fmt(c)} chez ${store}`)});
+  let armed=false;
+  $("fDel").onclick=()=>{ if(!armed){armed=true;$("fDel").textContent="Toucher encore pour confirmer";return}
+    fs.collection("courses").doc(i.id).delete().catch(fail("Suppression")); closeSheet(); };
+}
+
+// Fin des courses : vide le panier et envoie la dépense dans Budget Foyer
+$("finishBtn").onclick=()=>{
+  const cart=items.filter(i=>i.coche), known=cart.filter(i=>priceOf(i.key,store)), est=known.reduce((s,i)=>s+priceOf(i.key,store).c,0);
+  openSheet(`<h3>Terminer les courses</h3>
+    <p class="note">${plural(cart.length,"article")} chez <b>${esc(store)}</b>. Pas le bon magasin ? Change-le en haut de la liste.</p>
+    <span class="lbl">Total du ticket</span>
+    <label class="amount" for="tTotal"><input id="tTotal" inputmode="decimal" placeholder="0,00" value="${est?euros(est):""}" aria-label="Total du ticket"><span>€</span></label>
+    ${est?`<p class="note">Estimation sur ${plural(known.length,"prix connu")} : ${fmt(est)}. Corrige avec le montant du ticket.</p>`:""}
+    <label class="toggle" for="tBudget"><input type="checkbox" id="tBudget" checked><span>Ajouter la dépense dans Budget Foyer (Courses · ${esc(store)})</span></label>
+    <div class="btns"><button type="button" class="ghost" data-close>Annuler</button><button type="button" class="add" data-save>Valider</button></div>`,
+  ()=>{const c=parseCents($("tTotal").value), toBudget=$("tBudget").checked;
+    if(toBudget&&!c){toast("Saisis le total du ticket.",true);return}
+    const b=fs.batch(), now=new Date();
+    if(toBudget) b.set(fs.collection("depenses").doc(),{type:"depense",montant:c,categorie:"Courses",nom:store,mois:ym(now),date:localDate(now)});
+    cart.forEach(i=>{ b.delete(fs.collection("courses").doc(i.id));
+      b.set(fs.collection("produits").doc(i.key),{nom:produits[i.key]?.nom||i.nom,achats:FV.increment(1)},{merge:true}); });
+    b.commit().catch(fail("Validation"));
+    closeSheet(); toast(toBudget?`${fmt(c)} ajouté dans Budget Foyer.`:"Courses terminées.");
+  });
+};
+
+// --- Menus (le soir) ---
+const weekDays=()=>Array.from({length:7},(_,i)=>addDays(week,i));
+function platOf(m){return m?.platId?plats.find(p=>p.id===m.platId)||null:null}
+function renderMenus(){
+  const days=weekDays(), today=localDate(new Date());
+  $("wLbl").textContent=`Semaine du ${days[0].toLocaleDateString("fr-FR",{day:"numeric",month:"short"})}`;
+  $("days").innerHTML=days.map(d=>{const k=localDate(d), m=menus[k], p=platOf(m), label=p?p.nom:(m?.texte||"");
+    return `<button type="button" class="day${k===today?" today":""}" data-d="${k}">
+      <span class="dn">${d.toLocaleDateString("fr-FR",{weekday:"short"}).replace(".","")}<small>${d.getDate()}</small></span>
+      <span class="dv${label?"":" none"}">${label?esc(label):"Choisir le repas du soir"}</span>
+      ${p?`<span class="di">${plural((p.ingredients||[]).length,"ingr.").replace("ingr.s","ingr.")}</span>`:"<span></span>"}</button>`}).join("");
+}
+$("wPrev").onclick=()=>{week=addDays(week,-7);renderMenus()};
+$("wNext").onclick=()=>{week=addDays(week,7);renderMenus()};
+$("days").onclick=e=>{const b=e.target.closest(".day");if(b)openDay(b.dataset.d)};
+function openDay(k){
+  const m=menus[k], d=new Date(k+"T12:00"), list=plats.slice().sort((a,b)=>a.nom.localeCompare(b.nom,"fr"));
+  openSheet(`<h3 style="text-transform:capitalize">${d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}</h3>
+    ${list.length?`<span class="lbl">Mes plats</span><div class="chips" id="dPlats">${list.map(p=>`<button type="button" class="chip" data-id="${p.id}" aria-pressed="${m?.platId===p.id}">${esc(p.nom)}</button>`).join("")}</div>`
+      :`<p class="note">Aucun plat enregistré. Crée tes plats dans l'onglet Plats : leurs ingrédients rempliront la liste de courses.</p>`}
+    <span class="lbl">Ou autre chose</span>
+    <input class="field" id="dText" placeholder="Restes, Resto, Pizza…" value="${m&&!m.platId?esc(m.texte||""):""}" autocapitalize="sentences">
+    <div class="btns"><button type="button" class="ghost" id="dClear">Vider</button><button type="button" class="add" data-save>Enregistrer</button></div>`,
+  ()=>{const t=$("dText").value.trim(); if(t) fs.collection("menus").doc(k).set({platId:null,texte:t}).catch(fail("Enregistrement")); closeSheet()});
+  $("dPlats")?.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;const p=plats.find(x=>x.id===b.dataset.id);if(!p)return;
+    fs.collection("menus").doc(k).set({platId:p.id,texte:p.nom}).catch(fail("Enregistrement")); closeSheet()});
+  $("dClear").onclick=()=>{ if(m) fs.collection("menus").doc(k).delete().catch(fail("Suppression")); closeSheet() };
+}
+
+// Rassemble les ingrédients des plats de la semaine, sans doublon
+function weekIngredients(){
+  const agg={};
+  weekDays().forEach(d=>{const p=platOf(menus[localDate(d)]); if(!p) return;
+    (p.ingredients||[]).forEach(ing=>{const key=keyOf(ing), a=agg[key]||(agg[key]={key,nom:ing,n:0,pour:[]}); a.n++; if(!a.pour.includes(p.nom)) a.pour.push(p.nom)})});
+  return Object.values(agg).sort((a,b)=>a.nom.localeCompare(b.nom,"fr"));
+}
+$("prepBtn").onclick=()=>{
+  const rows=weekIngredients(), onList=new Set(items.map(i=>i.key));
+  if(!rows.length){openSheet(`<h3>Courses de la semaine</h3><p class="note">Aucun plat avec des ingrédients cette semaine. Choisis des plats dans les jours de la semaine.</p><div class="btns one"><button type="button" class="ghost" data-close>Fermer</button></div>`);return}
+  openSheet(`<h3>Courses de la semaine</h3>
+    <p class="note">Décoche ce que tu as déjà à la maison.</p>
+    <div class="list" id="prepList">${rows.map(a=>{const on=onList.has(a.key);
+      return `<label class="chk${on?" off":""}"><input type="checkbox" data-k="${a.key}" ${on?"disabled":"checked"}><span class="t"><span>${esc(a.nom)}${a.n>1?` <b>×${a.n}</b>`:""}</span><small>${on?"déjà sur la liste":"pour "+esc(a.pour.join(", "))}</small></span></label>`}).join("")}</div>
+    <div class="btns"><button type="button" class="ghost" data-close>Annuler</button><button type="button" class="add" data-save id="prepGo">Ajouter</button></div>`,
+  ()=>{const agg=Object.fromEntries(rows.map(a=>[a.key,a]));
+    const sel=[...$("prepList").querySelectorAll("input:checked:not(:disabled)")].map(x=>agg[x.dataset.k]);
+    if(!sel.length){closeSheet();return}
+    const b=fs.batch(); let t=Date.now();
+    sel.forEach(a=>b.set(fs.collection("courses").doc(),{nom:produits[a.key]?.nom||a.nom,key:a.key,coche:false,pour:a.pour.join(", "),t:t++}));
+    b.commit().catch(fail("Ajout")); closeSheet(); setTab("liste");
+    toast(`${plural(sel.length,"article")} ajouté${sel.length>1?"s":""} à la liste.`)});
+  const upd=()=>{const n=$("prepList").querySelectorAll("input:checked:not(:disabled)").length;$("prepGo").textContent=n?`Ajouter ${plural(n,"article")}`:"Rien à ajouter"};
+  $("prepList").onchange=upd; upd();
+};
+
+// --- Plats ---
+function renderPlats(){
+  const list=plats.slice().sort((a,b)=>a.nom.localeCompare(b.nom,"fr"));
+  $("plats").innerHTML=list.length?list.map(p=>`<button type="button" class="pl" data-id="${p.id}"><span>${esc(p.nom)}</span><small>${plural((p.ingredients||[]).length,"ingrédient")}</small></button>`).join("")
+    :`<p class="empty">Aucun plat pour l'instant. Crée tes plats habituels avec leurs ingrédients : ils rempliront la liste de courses depuis l'onglet Menus.</p>`;
+}
+$("newPlat").onclick=()=>openPlat(null);
+$("plats").onclick=e=>{const b=e.target.closest("[data-id]");if(b)openPlat(plats.find(p=>p.id===b.dataset.id))};
+function openPlat(p){
+  openSheet(`<h3>${p?"Modifier le plat":"Nouveau plat"}</h3>
+    <input class="field" id="pNom" placeholder="Nom du plat (ex. Lasagnes)" value="${p?esc(p.nom):""}" autocapitalize="sentences" aria-label="Nom du plat">
+    <span class="lbl">Ingrédients à acheter</span>
+    <textarea class="field" id="pIng" rows="7" placeholder="Un ingrédient par ligne&#10;Bœuf haché 500 g&#10;Sauce tomate&#10;Pâtes à lasagnes" aria-label="Ingrédients">${p?esc((p.ingredients||[]).join("\n")):""}</textarea>
+    <p class="note">Un ingrédient par ligne. Inutile d'y mettre le sel ou l'huile si tu en as toujours.</p>
+    <div class="btns"><button type="button" class="ghost" data-close>Annuler</button><button type="button" class="add" data-save>Enregistrer</button></div>
+    ${p?`<button type="button" class="link danger" id="pDel">Supprimer ce plat</button>`:""}`,
+  ()=>{const nom=$("pNom").value.trim(); if(!nom){toast("Donne un nom au plat.",true);return}
+    const seen=new Set(), ingredients=$("pIng").value.split(/\n/).map(s=>s.replace(/^[-•*\s]+/,"").trim())
+      .filter(s=>{const k=keyOf(s); if(!s||seen.has(k)) return false; seen.add(k); return true});
+    (p?fs.collection("plats").doc(p.id).set({nom,ingredients}):fs.collection("plats").add({nom,ingredients})).catch(fail("Enregistrement"));
+    closeSheet(); toast(`${nom} enregistré.`)});
+  if(p){let armed=false;$("pDel").onclick=()=>{ if(!armed){armed=true;$("pDel").textContent="Toucher encore pour confirmer";return}
+    fs.collection("plats").doc(p.id).delete().catch(fail("Suppression")); closeSheet()}}
+}
+
+function render(){
+  renderStores(); renderOften();
+  if(tab==="liste") renderList(); else if(tab==="menus") renderMenus(); else renderPlats();
+}
+
+// --- Données en direct ---
+let unsub=[];
+auth.onAuthStateChanged(u=>{
+  unsub.forEach(f=>f()); unsub=[];
+  $("loginView").hidden=!!u; $("appView").hidden=!u;
+  if(u) start();
+});
+function start(){
+  setTab("liste");
+  $("status").textContent="Chargement…";
+  let ready=0; const done=()=>{if(++ready===4)$("status").textContent=""};
+  const err=e=>{$("status").textContent=e.code==="permission-denied"
+    ?"Accès refusé : ajoute 'courses', 'produits', 'plats' et 'menus' dans les règles Firestore."
+    :"Données indisponibles : "+(e.message||e.code)};
+  const map=s=>s.docs.map(d=>({id:d.id,...d.data()}));
+  unsub.push(fs.collection("courses").onSnapshot(s=>{items=map(s);render();done()},err));
+  unsub.push(fs.collection("produits").onSnapshot(s=>{produits=Object.fromEntries(s.docs.map(d=>[d.id,d.data()]));render();done()},err));
+  unsub.push(fs.collection("plats").onSnapshot(s=>{plats=map(s);render();done()},err));
+  unsub.push(fs.collection("menus").onSnapshot(s=>{menus=Object.fromEntries(s.docs.map(d=>[d.id,d.data()]));render();done()},err));
+  unsub.push(fs.collection("reglages").doc("courses").onSnapshot(d=>{extraStores=d.exists?(d.data().magasins||[]):[];render()},()=>{}));
+}
+</script>
+</body>
+</html>
