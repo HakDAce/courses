@@ -693,9 +693,11 @@ function start(){
   unsub.push(fs.collection("plats").onSnapshot(s=>{plats=map(s);render();done()},err));
   unsub.push(fs.collection("menus").onSnapshot(s=>{menus=Object.fromEntries(s.docs.map(d=>[d.id,d.data()]));render();done()},err));
   unsub.push(fs.collection("reglages").doc("courses").onSnapshot(d=>{
-    const x=d.exists?d.data():{}; extraStores=x.magasins||[];
-    if(!x.basePlats&&!d.metadata?.fromCache) seedBasePlats();
-    render()},()=>{}));
+    const x=d.exists?d.data():{}; extraStores=x.magasins||[]; render()},()=>{}));
+  // Plats de base : on vérifie en ligne (pas dans la mémoire du téléphone) qu'ils n'ont jamais été ajoutés
+  fs.collection("reglages").doc("courses").get({source:"server"})
+    .then(d=>{ if(!(d.exists&&d.data().basePlats)) seedBasePlats(); })
+    .catch(()=>{});
 }
 </script>
 </body>
