@@ -1,6 +1,6 @@
 // Service worker : l'appli est toujours chargée en version la plus récente quand il y a du réseau,
 // et depuis le cache quand il n'y en a pas. Les données Firestore ne passent pas par ici.
-const CACHE = "courses-v3";
+const CACHE = "courses-v4";
 const SHELL = ["./", "index.html", "config.js", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
