@@ -3,228 +3,297 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Courses</title>
-<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>Mealio · Courses & Menus</title>
+<meta name="theme-color" content="#19522d" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d2917" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Courses">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mealio Courses">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
-/* Style iOS : grands titres, listes groupées, barre d'onglets en bas ; rouge tomate en accent */
+/* Style Mealio : Vert forêt profond, vert tendre/citron vert, cartes blanches arrondies, mascotte chef & barre d'onglets flottante */
 :root{
-  --bg:#f2f2f7; --surface:#ffffff; --fill:#e9e9ee; --sep:rgba(60,60,67,.2); --ring:#c7c7cc;
-  --fg:#1c1c1e; --muted:#8a8a8e;
-  --accent:#e0412c; --accent-fg:#ffffff; --accent-soft:#fde8e4;
-  --pos:#248a3d; --pos-soft:#e3f4e7; --del:#ff3b30; --today:#e0412c;
-  --bar:rgba(249,249,251,.86);
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",system-ui,"Segoe UI",Roboto,sans-serif;
+  --bg:#f1f6f1; --surface:#ffffff; --fill:#e6efe7; --sep:rgba(30,85,48,.11); --ring:#bdd2c1;
+  --fg:#132a1b; --muted:#5e7665;
+  --accent:#1f6336; --accent-fg:#ffffff; --accent-soft:#e2f3e6;
+  --lime:#a8e86c; --lime-fg:#133b20;
+  --hero-1:#134224; --hero-2:#1f6437; --hero-3:#2e854a;
+  --pos:#23863e; --pos-soft:#dff5e4; --del:#e03e2f; --today:#1f6336;
+  --bar:rgba(255,255,255,.94);
+  --shadow:0 8px 24px rgba(18,58,31,.07);
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#000000; --surface:#1c1c1e; --fill:#2c2c2e; --sep:rgba(84,84,88,.65); --ring:#48484a;
-  --fg:#ffffff; --muted:#98989f;
-  --accent:#ff6b55; --accent-fg:#1a0703; --accent-soft:#3b1a14;
-  --pos:#30d158; --pos-soft:#0f2e18; --del:#ff453a; --today:#ff6b55;
-  --bar:rgba(22,22,24,.86);
+  --bg:#0b1910; --surface:#13281b; --fill:#1c3726; --sep:rgba(168,232,108,.14); --ring:#355941;
+  --fg:#f2f9f3; --muted:#93b09b;
+  --accent:#4cc36b; --accent-fg:#092110; --accent-soft:#193b25;
+  --lime:#a8e86c; --lime-fg:#10331b;
+  --hero-1:#0d2e19; --hero-2:#174c2a; --hero-3:#21683a;
+  --pos:#4cd964; --pos-soft:#14351e; --del:#ff5b4d; --today:#a8e86c;
+  --bar:rgba(17,36,24,.94);
+  --shadow:0 10px 28px rgba(0,0,0,.35);
   color-scheme:dark}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:17px;line-height:1.35;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.38;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
 button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:calc(env(safe-area-inset-top,0px) + 8px) calc(104px + env(safe-area-inset-bottom,0px))}
-.page{display:flex;flex-direction:column;gap:22px}
+.wrap{max-width:580px;margin:0 auto;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:calc(env(safe-area-inset-top,0px) + 10px) calc(114px + env(safe-area-inset-bottom,0px))}
+.page{display:flex;flex-direction:column;gap:18px}
+
+/* === BANNIÈRE HERO MEALIO === */
+.mealio-hero{position:relative;overflow:hidden;border-radius:26px;background:radial-gradient(circle at 78% 42%,rgba(168,232,108,.32) 0%,transparent 52%),linear-gradient(140deg,var(--hero-1) 0%,var(--hero-2) 55%,var(--hero-3) 100%);color:#fff;padding:16px 18px 18px;box-shadow:0 14px 34px rgba(17,64,34,.24);margin-bottom:18px}
+.mealio-wm{position:absolute;left:50%;top:32px;transform:translateX(-50%);font-size:clamp(54px,16vw,88px);font-weight:900;letter-spacing:.06em;color:rgba(195,247,154,.13);pointer-events:none;user-select:none;white-space:nowrap;line-height:1}
+.hero-top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.brand{display:inline-flex;align-items:center;gap:7px;font-size:23px;font-weight:800;letter-spacing:-.02em;color:#fff}
+.brand-leaf{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;background:rgba(168,232,108,.22);font-size:17px}
+.brand b{color:var(--lime)}
+.hero-actions{display:flex;align-items:center;gap:8px}
+.hero-chip{border:0;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.hero-icon-btn{width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;display:grid;place-items:center;font-size:15px}
+.hero-body{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:8px}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:var(--lime);color:var(--lime-fg);font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:8px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.hero-title{font-size:clamp(22px,5.6vw,30px);font-weight:800;line-height:1.08;margin:0 0 6px;letter-spacing:-.02em}
+.hero-title span{display:block;color:var(--lime)}
+.hero-sub{font-size:12.5px;color:rgba(255,255,255,.84);margin:0 0 12px;line-height:1.35}
+.hero-cta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hero-cta{border:1px solid rgba(168,232,108,.45);background:#0f331c;color:#fff;border-radius:999px;padding:6px 6px 6px 14px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.hero-cta i{width:26px;height:26px;border-radius:50%;background:#399b53;color:#fff;display: inline-grid;place-items:center;font-style:normal;font-size:14px}
+.hero-art{position:relative;display:flex;justify-content:center;align-items:center;min-height:148px}
+.hero-art svg{width:100%;max-width:168px;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.28))}
+.hero-stats{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:11px;border-top:1px solid rgba(255,255,255,.14)}
+.hstat{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.88);line-height:1.2}
+.hstat-ico{width:24px;height:24px;border-radius:7px;background:rgba(168,232,108,.2);display:grid;place-items:center;font-size:13px;flex:none}
+.hstat b{display:block;font-size:12px;color:#fff}
+
+/* === BARRE CALENDRIER 7 JOURS & CARTE "REPAS DU JOUR" (STYLE MOBILE MEALIO) === */
+.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day-pill{border:1px solid var(--sep);background:var(--surface);border-radius:16px;padding:9px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow);transition:transform .15s ease,background .15s ease}
+.day-pill span{font-size:11px;font-weight:600;color:var(--muted);text-transform:capitalize}
+.day-pill b{font-size:16px;font-weight:800;color:var(--fg);font-variant-numeric:tabular-nums}
+.day-pill.has-meal::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--pos)}
+.day-pill[aria-selected="true"]{background:linear-gradient(145deg,#25733f,#174e29);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 8px 18px rgba(25,88,46,.3)}
+.day-pill[aria-selected="true"] span,.day-pill[aria-selected="true"] b{color:#fff}
+.day-pill[aria-selected="true"].has-meal::after{background:var(--lime)}
+
+.today-card{background:var(--surface);border-radius:22px;padding:14px;box-shadow:var(--shadow);border:1px solid var(--sep);display:flex;flex-direction:column;gap:12px}
+.today-banner{position:relative;border-radius:16px;background:linear-gradient(135deg,#e3f4e6 0%,#cdecd3 55%,#eef8e8 100%);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;overflow:hidden}
+@media (prefers-color-scheme:dark){.today-banner{background:linear-gradient(135deg,#183824 0%,#204a30 100%)}}
+.today-plate{width:64px;height:64px;border-radius:50%;background:var(--surface);box-shadow:0 6px 16px rgba(19,62,33,.15);display:grid;place-items:center;font-size:36px;flex:none;border:3px solid rgba(168,232,108,.6)}
+.today-info{min-width:0;flex:1}
+.today-kicker{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:2px}
+.today-title{font-size:18px;font-weight:800;margin:0;line-height:1.2;color:var(--fg)}
+.today-meta{font-size:13px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.today-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.view-rec-btn{border:1px solid var(--sep);background:var(--fill);color:var(--fg);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.view-rec-btn.pri{background:var(--accent);color:#fff;border-color:transparent}
+
+/* 4 Cartes catégories carrées façon Mealio (Breakfast / Lunch / Dinner / Snacks) */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cat-card{border:1px solid var(--sep);background:var(--surface);border-radius:18px;padding:11px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow);text-align:center}
+.cat-card[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.cat-ico{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;font-size:21px}
+.cat-card span{font-size:12px;font-weight:700;color:var(--fg);line-height:1.15}
+
 /* grand titre */
-.lt{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:8px}
-.lt h1{font-size:34px;font-weight:700;letter-spacing:.01em;margin:0;line-height:1.1}
-.lt .act{background:none;border:0;color:var(--accent);font-size:17px;font-weight:600;padding:6px 0}
-.status{color:var(--muted);font-size:15px;margin:-12px 0 0}
+.lt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:2px}
+.lt h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.15}
+.lt .act{background:var(--accent-soft);border:0;color:var(--accent);font-size:14px;font-weight:700;padding:7px 13px;border-radius:999px}
+.status{color:var(--muted);font-size:14px;margin:-8px 0 0}
 /* groupes */
-.sec{display:flex;flex-direction:column;gap:7px}
-.sh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;text-transform:uppercase;letter-spacing:.02em;color:var(--muted);padding:0 16px}
-.sh span:nth-child(2){text-transform:none;letter-spacing:0;font-variant-numeric:tabular-nums}
-.sh-act{border:0;background:none;color:var(--accent);font-size:13px;font-weight:600;padding:2px 0;text-transform:none;letter-spacing:0}
-.group{background:var(--surface);border-radius:12px;overflow:hidden}
-.foot{font-size:13px;color:var(--muted);padding:0 16px;margin:0}
-.empty{padding:16px;color:var(--muted);font-size:15px;margin:0}
+.sec{display:flex;flex-direction:column;gap:8px}
+.sh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);padding:0 8px}
+.sh span:nth-child(2){text-transform:none;letter-spacing:0;font-variant-numeric:tabular-nums;font-weight:600}
+.sh-act{border:0;background:none;color:var(--accent);font-size:13px;font-weight:700;padding:2px 0;text-transform:none;letter-spacing:0}
+.group{background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--sep)}
+.foot{font-size:13px;color:var(--muted);padding:0 10px;margin:0}
+.empty{padding:18px;color:var(--muted);font-size:15px;margin:0;text-align:center}
 /* rayons (façon Jow) - pliables */
-.aisles{display:flex;flex-direction:column;gap:12px}
+.aisles{display:flex;flex-direction:column;gap:11px}
 .aisle{display:flex;flex-direction:column;gap:6px}
-.aisle-hd{width:100%;border:0;background:var(--surface);border-radius:10px;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-size:15px;font-weight:600;color:var(--fg);text-align:left}
-.aisle-hd small{font-weight:500;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:6px}
+.aisle-hd{width:100%;border:1px solid var(--sep);background:var(--surface);border-radius:14px;display:flex;justify-content:space-between;align-items:center;padding:11px 14px;font-size:15px;font-weight:700;color:var(--fg);text-align:left;box-shadow:var(--shadow)}
+.aisle-hd small{font-weight:600;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:6px}
 .aisle-chev{display:inline-block;transition:transform .18s ease;font-size:14px;color:var(--accent)}
 .aisle.closed .aisle-chev{transform:rotate(-90deg)}
 /* magasins & filtres */
-.stores{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px}
+.stores{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -14px;padding:2px 14px}
 .stores::-webkit-scrollbar{display:none}
-.pill{flex:none;border:0;background:var(--surface);color:var(--fg);border-radius:999px;padding:10px 16px;font-size:16px;font-weight:500}
-.pill.sm{padding:7px 13px;font-size:14px}
-.pill[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
-.pill.dash{background:transparent;box-shadow:inset 0 0 0 1px var(--ring);color:var(--muted)}
+.pill{flex:none;border:1px solid var(--sep);background:var(--surface);color:var(--fg);border-radius:999px;padding:9px 16px;font-size:15px;font-weight:600;box-shadow:0 2px 8px rgba(18,58,31,.04)}
+.pill.sm{padding:7px 13px;font-size:13.5px}
+.pill[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:transparent;box-shadow:0 4px 12px rgba(31,99,54,.25)}
+.pill.dash{background:transparent;border:1px dashed var(--ring);color:var(--muted);box-shadow:none}
 /* saisie */
-.addcard{background:var(--surface);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
-.field{width:100%;min-width:0;border:0;background:var(--fill);border-radius:10px;padding:13px 14px;font-size:17px;color:var(--fg)}
+.addcard{background:var(--surface);border-radius:20px;padding:13px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);border:1px solid var(--sep)}
+.field{width:100%;min-width:0;border:1px solid transparent;background:var(--fill);border-radius:13px;padding:12px 14px;font-size:16px;color:var(--fg)}
+.field:focus{border-color:var(--accent);background:var(--surface);outline:none}
 .field::placeholder{color:var(--muted)}
 textarea.field{resize:vertical;line-height:1.45}
 .addrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .pricebox{position:relative}
 .pricebox .field{padding-right:34px;font-variant-numeric:tabular-nums}
-.pricebox span{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.btn{border:0;border-radius:12px;padding:14px 16px;font-size:17px;font-weight:600;background:var(--fill);color:var(--fg);min-height:50px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.btn.primary{background:var(--accent);color:var(--accent-fg)}
+.pricebox span{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-weight:600}
+.btn{border:0;border-radius:14px;padding:13px 16px;font-size:16px;font-weight:700;background:var(--fill);color:var(--fg);min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.primary{background:linear-gradient(135deg,#287c43,#1b572f);color:#fff;box-shadow:0 6px 16px rgba(27,87,47,.25)}
 .btn.pos{background:var(--pos);color:#fff}
 .btn.plain{background:transparent;color:var(--accent)}
 .btn.danger{background:transparent;color:var(--del)}
 .btn:disabled{opacity:.45;cursor:default}
 .inline{display:grid;grid-template-columns:1fr auto;gap:10px}
 /* suggestions */
-.sugg{display:flex;flex-direction:column;background:var(--fill);border-radius:10px;overflow:hidden;margin-top:-4px}
-.sg{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;background:transparent;text-align:left;padding:13px 14px;font-size:17px;min-height:48px;color:var(--fg)}
+.sugg{display:flex;flex-direction:column;background:var(--fill);border-radius:12px;overflow:hidden;margin-top:-4px}
+.sg{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;background:transparent;text-align:left;padding:12px 14px;font-size:16px;min-height:46px;color:var(--fg)}
 .sg+.sg{box-shadow:inset 0 .5px 0 var(--sep)}
 .sg:active{background:var(--sep)}
-.sg small{color:var(--muted);font-size:15px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.sg small{color:var(--muted);font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -14px;padding:2px 14px}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:none;border:0;background:var(--surface);border-radius:999px;padding:9px 14px;font-size:15px;color:var(--fg)}
+.chip{flex:none;border:1px solid var(--sep);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--fg);box-shadow:0 2px 6px rgba(18,58,31,.04)}
 /* lignes de la liste */
 .row{position:relative;overflow:hidden}
 .row.sw,.row.open{background:var(--del)}
-.row-in{position:relative;background:var(--surface);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:10px 12px 10px 14px;min-height:64px;touch-action:pan-y;transition:transform .22s ease;user-select:none;-webkit-user-select:none}
+.row-in{position:relative;background:var(--surface);display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:10px 12px 10px 14px;min-height:62px;touch-action:pan-y;transition:transform .22s ease;user-select:none;-webkit-user-select:none}
 .row+.row .row-in::before{content:"";position:absolute;left:56px;right:0;top:0;height:.5px;background:var(--sep)}
-.delbtn{position:absolute;right:0;top:0;bottom:0;width:96px;border:0;background:transparent;color:#fff;font-size:16px;font-weight:600}
-.ck{width:30px;height:30px;border-radius:50%;border:2px solid var(--ring);background:transparent;padding:0;display:grid;place-items:center}
+.delbtn{position:absolute;right:0;top:0;bottom:0;width:96px;border:0;background:transparent;color:#fff;font-size:15px;font-weight:700}
+.ck{width:28px;height:28px;border-radius:50%;border:2px solid var(--ring);background:transparent;padding:0;display:grid;place-items:center;transition:all .15s ease}
 .done .ck{background:var(--accent);border-color:var(--accent)}
-.done .ck::after{content:"";width:7px;height:13px;border:solid var(--accent-fg);border-width:0 2.5px 2.5px 0;transform:translateY(-2px) rotate(45deg)}
-.t{min-width:0;display:flex;flex-direction:column;gap:5px}
-.nm{font-size:17px;overflow-wrap:anywhere}
+.done .ck::after{content:"";width:6px;height:12px;border:solid var(--accent-fg);border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.t{min-width:0;display:flex;flex-direction:column;gap:4px}
+.nm{font-size:16px;font-weight:600;overflow-wrap:anywhere}
 .done .nm{color:var(--muted);text-decoration:line-through}
-.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
-.det-pill{background:var(--fill);color:var(--fg);font-weight:600;border-radius:6px;padding:2px 7px;font-size:12px}
-.pr{border:0;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:5px 10px;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.det-pill{background:var(--fill);color:var(--fg);font-weight:700;border-radius:6px;padding:2px 7px;font-size:11.5px}
+.pr{border:0;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:4px 9px;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 .pr.none{background:transparent;box-shadow:inset 0 0 0 1px var(--ring);color:var(--muted);font-weight:500}
 .qty{display:flex;align-items:center;background:var(--fill);border-radius:10px}
-.qty button{width:38px;height:38px;border:0;background:transparent;font-size:22px;line-height:1;color:var(--fg)}
+.qty button{width:36px;height:36px;border:0;background:transparent;font-size:20px;line-height:1;color:var(--fg)}
 .qty button:disabled{opacity:.3}
-.qty b{min-width:20px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
+.qty b{min-width:20px;text-align:center;font-variant-numeric:tabular-nums;font-weight:700}
 /* comparateur */
 .cmp{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:baseline;padding:13px 16px;font-variant-numeric:tabular-nums}
 .cmp+.cmp{box-shadow:inset 16px .5px 0 var(--surface),inset 0 .5px 0 var(--sep)}
 .cmp small{color:var(--muted);font-size:13px}
-.cmp b{font-weight:600}
-.cmp.cur span:first-child{font-weight:600}
-.verdict{background:var(--pos-soft);border-radius:12px;padding:12px 16px;font-size:15px;margin:0}
+.cmp b{font-weight:700;color:var(--accent)}
+.cmp.cur span:first-child{font-weight:700}
+.verdict{background:var(--pos-soft);border:1px solid rgba(35,134,62,.2);border-radius:14px;padding:12px 15px;font-size:14.5px;margin:0}
 .verdict b{color:var(--pos)}
 .cartbar{display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px;font-variant-numeric:tabular-nums}
-.cartbar b{font-size:20px}
+.cartbar b{font-size:20px;color:var(--accent)}
 /* menus */
 .weeknav{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.weeknav strong{font-size:17px;font-weight:600}
-.nav{width:44px;height:44px;border-radius:50%;border:0;background:var(--surface);font-size:22px;color:var(--accent)}
+.weeknav strong{font-size:16px;font-weight:700}
+.nav{width:40px;height:40px;border-radius:50%;border:1px solid var(--sep);background:var(--surface);font-size:20px;color:var(--accent);box-shadow:var(--shadow)}
 .day-row{display:grid;grid-template-columns:1fr auto;align-items:center}
 .day-row+.day-row{box-shadow:inset 0 .5px 0 var(--sep)}
 .day{width:100%;display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:12px 16px;min-height:64px;border:0;background:transparent;text-align:left}
-.dn{display:flex;flex-direction:column;line-height:1.15;font-weight:600;text-transform:capitalize}
-.dn small{font-weight:400;color:var(--muted);font-size:13px}
+.dn{display:flex;flex-direction:column;line-height:1.15;font-weight:700;text-transform:capitalize}
+.dn small{font-weight:500;color:var(--muted);font-size:13px}
 .day.today .dn{color:var(--today)}
-.dv{min-width:0;overflow-wrap:anywhere;display:flex;flex-direction:column;gap:3px}
-.dv.none{color:var(--muted)}
-.dv-sub{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.cook-quick{border:0;background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:8px 11px;margin-right:12px;font-size:14px;font-weight:600;white-space:nowrap}
+.dv{min-width:0;overflow-wrap:anywhere;display:flex;flex-direction:column;gap:3px;font-weight:600}
+.dv.none{color:var(--muted);font-weight:500}
+.dv-sub{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:500}
+.cook-quick{border:0;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:8px 12px;margin-right:12px;font-size:13px;font-weight:700;white-space:nowrap}
 .chev{color:var(--ring);font-size:20px}
-/* plats (façon Marmiton / Jow) */
-.pl{width:100%;display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:12px;padding:13px 16px;min-height:64px;border:0;background:transparent;text-align:left}
+/* plats (façon Mealio / Jow) */
+.pl{width:100%;display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;padding:13px 16px;min-height:66px;border:0;background:transparent;text-align:left}
 .pl+.pl{box-shadow:inset 0 .5px 0 var(--sep)}
-.pl-ico{width:40px;height:40px;border-radius:10px;background:var(--fill);display:grid;place-items:center;font-size:22px}
+.pl-ico{width:44px;height:44px;border-radius:14px;background:var(--accent-soft);display:grid;place-items:center;font-size:24px}
 .pl-main{min-width:0;display:flex;flex-direction:column;gap:4px}
-.pl-title{font-weight:600;font-size:17px;overflow-wrap:anywhere}
-.pl-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
-.tag-badge{background:var(--fill);color:var(--fg);border-radius:6px;padding:2px 7px;font-size:12px;font-weight:500}
-.tag-badge.fast{background:var(--pos-soft);color:var(--pos);font-weight:600}
-.pl small{color:var(--muted);font-size:15px;white-space:nowrap}
+.pl-title{font-weight:700;font-size:16.5px;overflow-wrap:anywhere}
+.pl-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.tag-badge{background:var(--fill);color:var(--fg);border-radius:999px;padding:2px 8px;font-size:11.5px;font-weight:600}
+.tag-badge.fast{background:var(--pos-soft);color:var(--pos);font-weight:700}
+.pl small{color:var(--muted);font-size:16px;white-space:nowrap}
 /* fiche recette & mode cuisine */
 .rec-head{display:flex;align-items:center;gap:14px}
-.rec-ico{width:54px;height:54px;border-radius:14px;background:var(--surface);display:grid;place-items:center;font-size:30px;flex:none}
+.rec-ico{width:56px;height:56px;border-radius:16px;background:var(--accent-soft);display:grid;place-items:center;font-size:30px;flex:none}
 .rec-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.serv-bar{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:12px;padding:10px 14px}
-.serv-bar span{font-size:15px;font-weight:600}
-.ing-list{background:var(--surface);border-radius:12px;overflow:hidden}
-.ing-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;font-size:16px}
+.serv-bar{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:16px;padding:10px 14px;border:1px solid var(--sep)}
+.serv-bar span{font-size:15px;font-weight:700}
+.ing-list{background:var(--surface);border-radius:16px;overflow:hidden;border:1px solid var(--sep)}
+.ing-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;font-size:15.5px}
 .ing-row+.ing-row{box-shadow:inset 0 .5px 0 var(--sep)}
-.ing-row b{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:600;white-space:nowrap}
-.steps-box{background:var(--surface);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:14px}
-.step-item{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;font-size:16px;line-height:1.45}
-.step-num{width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;display:grid;place-items:center;margin-top:1px}
+.ing-row b{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:700;white-space:nowrap}
+.steps-box{background:var(--surface);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:14px;border:1px solid var(--sep)}
+.step-item{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;font-size:15.5px;line-height:1.45}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px;display:grid;place-items:center;margin-top:1px}
 /* Mode Cuisiner pas à pas */
-.cook-card{background:var(--surface);border-radius:16px;padding:20px 18px;display:flex;flex-direction:column;gap:16px;min-height:220px;justify-content:space-between}
-.cook-prog{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600;color:var(--muted)}
-.cook-bar{height:6px;background:var(--fill);border-radius:999px;overflow:hidden}
-.cook-bar > div{height:100%;background:var(--accent);transition:width .25s ease}
-.cook-step-txt{font-size:21px;line-height:1.45;font-weight:500;margin:6px 0}
-.timer-pill{align-self:flex-start;border:0;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:9px 16px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.cook-card{background:var(--surface);border-radius:20px;padding:20px 18px;display:flex;flex-direction:column;gap:16px;min-height:220px;justify-content:space-between;border:1px solid var(--sep);box-shadow:var(--shadow)}
+.cook-prog{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--muted)}
+.cook-bar{height:7px;background:var(--fill);border-radius:999px;overflow:hidden}
+.cook-bar > div{height:100%;background:linear-gradient(90deg,var(--accent),#56c271);transition:width .25s ease}
+.cook-step-txt{font-size:20px;line-height:1.45;font-weight:600;margin:6px 0}
+.timer-pill{align-self:flex-start;border:0;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:9px 16px;font-size:14.5px;font-weight:700;display:inline-flex;align-items:center;gap:8px}
 .timer-pill.run{background:var(--pos-soft);color:var(--pos)}
-/* barre d'onglets + cartes recettes express */
-.rec-cards{display:flex;flex-direction:column;gap:12px}
-.rcard{background:var(--surface);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+/* cartes recettes express façon Mealio */
+.rec-cards{display:flex;flex-direction:column;gap:14px}
+.rcard{background:var(--surface);border-radius:20px;padding:15px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);border:1px solid var(--sep)}
 .rcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer}
-.rcard-title{font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px}
-.rcard-ings{font-size:14px;color:var(--muted);line-height:1.4}
-.rcard-ings b{color:var(--fg);font-weight:600}
-.rcard-short{background:var(--fill);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.45;display:flex;flex-direction:column;gap:4px}
+.rcard-title{font-weight:800;font-size:17.5px;display:flex;align-items:center;gap:10px}
+.rcard-emo{width:42px;height:42px;border-radius:13px;background:var(--accent-soft);display:grid;place-items:center;font-size:23px;flex:none}
+.rcard-ings{font-size:13.5px;color:var(--muted);line-height:1.4}
+.rcard-ings b{color:var(--fg);font-weight:700}
+.rcard-short{background:var(--fill);border-radius:14px;padding:11px 13px;font-size:14.5px;line-height:1.45;display:flex;flex-direction:column;gap:5px}
 .rcard-short div{display:flex;gap:8px;align-items:baseline}
-.rcard-short b{color:var(--accent);font-size:13px;flex:none}
+.rcard-short b{color:var(--accent);font-size:13px;flex:none;font-weight:800}
 .rcard-acts{display:flex;gap:8px;flex-wrap:wrap;padding-top:2px}
-.rcard-btn{border:0;background:var(--fill);color:var(--fg);border-radius:9px;padding:8px 12px;font-size:14px;font-weight:600}
-.rcard-btn.pri{background:var(--accent-soft);color:var(--accent)}
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);box-shadow:0 -.5px 0 var(--sep);display:grid;grid-template-columns:repeat(4,1fr);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
-.tab{position:relative;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font-size:11px;font-weight:500;color:var(--muted)}
-.tab svg{width:28px;height:28px}
+.rcard-btn{border:1px solid var(--sep);background:var(--surface);color:var(--fg);border-radius:999px;padding:8px 13px;font-size:13.5px;font-weight:700}
+.rcard-btn.pri{background:var(--accent);color:#fff;border-color:transparent}
+
+/* === BARRE D'ONGLETS DU BAS FAÇON MEALIO AVEC BOUTON + CENTRAL FLOTTANT === */
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:540px;z-index:20;background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--sep);border-radius:26px;box-shadow:0 12px 32px rgba(15,52,28,.16);display:grid;grid-template-columns:1fr 1fr 64px 1fr 1fr;align-items:center;padding:6px 8px}
+.tab{position:relative;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;font-size:11px;font-weight:700;color:var(--muted)}
+.tab svg{width:24px;height:24px}
 .tab[aria-selected="true"]{color:var(--accent)}
-.tab-badge{position:absolute;top:2px;left:calc(50% + 6px);background:var(--accent);color:var(--accent-fg);font-size:10px;font-weight:700;border-radius:999px;padding:1px 5px;min-width:16px;text-align:center;font-variant-numeric:tabular-nums}
+.tab-badge{position:absolute;top:1px;left:calc(50% + 5px);background:var(--accent);color:var(--accent-fg);font-size:10px;font-weight:800;border-radius:999px;padding:1px 5px;min-width:16px;text-align:center;font-variant-numeric:tabular-nums}
+.fab-wrap{display:flex;justify-content:center;align-items:center}
+.fab-add{width:52px;height:52px;border-radius:50%;border:4px solid var(--surface);background:linear-gradient(145deg,#52c26d,#1f6336);color:#fff;font-size:28px;font-weight:500;line-height:1;display:grid;place-items:center;margin-top:-24px;box-shadow:0 8px 20px rgba(31,99,54,.38);transition:transform .15s ease}
+.fab-add:active{transform:scale(.93)}
+
 /* fenêtre du bas */
-.overlay{position:fixed;inset:0;background:rgb(0 0 0 / .45);z-index:30;display:flex;align-items:flex-end;justify-content:center}
-.sheet{background:var(--bg);width:100%;max-width:560px;border-radius:16px 16px 0 0;padding-top:8px;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px;max-height:92vh;overflow:auto}
-.grab{width:36px;height:5px;border-radius:3px;background:var(--ring);align-self:center;margin-bottom:4px;flex:none}
-.sheet h3{font-size:22px;font-weight:700;margin:0;overflow-wrap:anywhere}
-.sheet .note{color:var(--muted);font-size:15px;margin:-8px 0 0}
-.big{display:flex;align-items:baseline;justify-content:center;gap:6px;background:var(--surface);border-radius:12px;padding:14px}
-.big input{width:100%;min-width:0;border:0;background:transparent;text-align:right;font-size:48px;font-weight:700;font-variant-numeric:tabular-nums;outline:none;color:var(--fg)}
-.big span{font-size:34px;font-weight:600;color:var(--muted)}
+.overlay{position:fixed;inset:0;background:rgb(8 24 13 / .52);z-index:30;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
+.sheet{background:var(--bg);width:100%;max-width:580px;border-radius:24px 24px 0 0;padding-top:8px;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px;max-height:92vh;overflow:auto}
+.grab{width:38px;height:5px;border-radius:3px;background:var(--ring);align-self:center;margin-bottom:4px;flex:none}
+.sheet h3{font-size:22px;font-weight:800;margin:0;overflow-wrap:anywhere}
+.sheet .note{color:var(--muted);font-size:14.5px;margin:-8px 0 0}
+.big{display:flex;align-items:baseline;justify-content:center;gap:6px;background:var(--surface);border-radius:16px;padding:14px;border:1px solid var(--sep)}
+.big input{width:100%;min-width:0;border:0;background:transparent;text-align:right;font-size:46px;font-weight:800;font-variant-numeric:tabular-nums;outline:none;color:var(--fg)}
+.big span{font-size:32px;font-weight:700;color:var(--muted)}
 .btns{display:grid;grid-template-columns:1fr 1.6fr;gap:10px}
 .btns.equal{grid-template-columns:1fr 1fr}
 .btns.one{grid-template-columns:1fr}
-details.others{background:var(--surface);border-radius:12px;overflow:hidden}
-details.others summary{padding:14px 16px;color:var(--accent);font-size:16px;list-style:none;cursor:pointer;font-weight:500}
+details.others{background:var(--surface);border-radius:16px;overflow:hidden;border:1px solid var(--sep)}
+details.others summary{padding:14px 16px;color:var(--accent);font-size:15.5px;list-style:none;cursor:pointer;font-weight:700}
 details.others summary::-webkit-details-marker{display:none}
 .prow{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:baseline;padding:12px 16px;box-shadow:inset 0 .5px 0 var(--sep);font-variant-numeric:tabular-nums}
 .prow small{color:var(--muted);font-size:13px}
-.prow.cur span:first-child{font-weight:600}
-.badge{font-size:12px;font-weight:600;color:var(--pos);background:var(--pos-soft);border-radius:999px;padding:2px 8px;margin-left:6px;white-space:nowrap}
+.prow.cur span:first-child{font-weight:700}
+.badge{font-size:11.5px;font-weight:700;color:var(--pos);background:var(--pos-soft);border-radius:999px;padding:2px 8px;margin-left:6px;white-space:nowrap}
 .chk{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 16px;min-height:56px}
 .chk+.chk{box-shadow:inset 0 .5px 0 var(--sep)}
-.chk input{width:24px;height:24px;accent-color:var(--accent);margin:0}
+.chk input{width:22px;height:22px;accent-color:var(--accent);margin:0}
 .chk .t small{color:var(--muted);font-size:13px}
 .chk.off{opacity:.55}
-.chk .q{color:var(--accent);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
-.toggle{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border-radius:12px;padding:14px 16px;font-size:16px}
-.toggle input{width:24px;height:24px;accent-color:var(--accent);margin:0}
+.chk .q{color:var(--accent);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.toggle{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--surface);border-radius:16px;padding:14px 16px;font-size:15.5px;border:1px solid var(--sep)}
+.toggle input{width:22px;height:22px;accent-color:var(--accent);margin:0}
 .dchips{display:flex;flex-wrap:wrap;gap:8px}
-.dchips .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.dchips .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:transparent}
 /* message bas d'écran */
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;background:#2c2c2e;color:#fff;border-radius:14px;padding:12px 14px 12px 18px;font-size:15px;display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100% - 32px);box-shadow:0 8px 24px rgb(0 0 0 / .25)}
-.toast button{border:0;background:transparent;color:#ff8a78;font-weight:600;font-size:15px;padding:4px 6px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:40;background:#163d23;color:#fff;border-radius:999px;padding:11px 16px 11px 18px;font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:12px;width:max-content;max-width:calc(100% - 32px);box-shadow:0 10px 26px rgb(12 42 22 / .35)}
+.toast button{border:0;background:transparent;color:var(--lime);font-weight:800;font-size:14.5px;padding:4px 6px}
 .toast.err{background:#b3261e}
 .toast.err button{color:#fff}
-.login{display:flex;flex-direction:column;gap:22px;min-height:80vh;justify-content:center}
+.login{display:flex;flex-direction:column;gap:18px;min-height:82vh;justify-content:center}
 .login form{display:flex;flex-direction:column;gap:10px}
-.msg{font-size:15px;color:var(--muted);margin:0;min-height:20px}
+.msg{font-size:14.5px;color:var(--muted);margin:0;min-height:20px}
 .msg.err{color:var(--del)}
-.logout{background:none;border:0;color:var(--muted);font-size:15px;text-decoration:underline;align-self:center;padding:8px}
+.logout{background:none;border:0;color:var(--muted);font-size:14px;text-decoration:underline;align-self:center;padding:8px}
 @media (prefers-reduced-motion:reduce){.row-in{transition:none}}
 </style>
 </head>
@@ -232,24 +301,142 @@ details.others summary::-webkit-details-marker{display:none}
 
 <div class="wrap" id="loginView" hidden>
   <div class="login">
-    <div class="lt"><h1>Courses</h1></div>
+    <div class="mealio-hero" style="margin-bottom:0">
+      <div class="mealio-wm">MEALIO</div>
+      <div class="hero-top">
+        <span class="brand"><span class="brand-leaf">🌿</span>meal<b>io</b></span>
+      </div>
+      <div class="hero-body">
+        <div>
+          <span class="hero-badge">🌱 Habitudes saines, foyer heureux</span>
+          <h1 class="hero-title">Planifiez vos repas.<span>Savourez chaque bouchée.</span></h1>
+          <p class="hero-sub">Menus de la semaine, recettes rapides enfants & adultes et comparateur Lidl / E.Leclerc.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 200 200" fill="none">
+            <circle cx="105" cy="108" r="68" fill="#A8E86C" fill-opacity="0.22"/>
+            <!-- Toque de chef -->
+            <ellipse cx="105" cy="52" rx="44" ry="26" fill="#FFFFFF"/>
+            <circle cx="76" cy="48" r="22" fill="#F4F9F4"/>
+            <circle cx="105" cy="38" r="26" fill="#FFFFFF"/>
+            <circle cx="134" cy="48" r="22" fill="#F4F9F4"/>
+            <rect x="73" y="62" width="64" height="18" rx="6" fill="#E8F2E9"/>
+            <path d="M105 65C105 65 112 58 116 63C120 68 111 75 105 75C99 75 90 68 94 63C98 58 105 65 105 65Z" fill="#2E854A"/>
+            <!-- Cuillère en bois -->
+            <rect x="36" y="72" width="7" height="58" rx="3.5" transform="rotate(-18 36 72)" fill="#C67D3B"/>
+            <ellipse cx="33" cy="65" rx="12" ry="16" transform="rotate(-18 33 65)" fill="#DA924E"/>
+            <!-- Visage mignon -->
+            <rect x="74" y="76" width="62" height="54" rx="26" fill="#FFD7BA"/>
+            <path d="M72 88C72 74 88 68 105 68C122 68 138 74 138 88C130 80 118 78 105 78C92 78 80 80 72 88Z" fill="#4A2C1D"/>
+            <circle cx="91" cy="99" r="6.5" fill="#3B2216"/>
+            <circle cx="89" cy="97" r="2.2" fill="#FFFFFF"/>
+            <path d="M113 99C116 94 123 94 126 99" stroke="#3B2216" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="82" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
+            <circle cx="128" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
+            <path d="M96 111C96 111 100 119 106 119C112 119 116 111 116 111Z" fill="#D94B43"/>
+            <!-- Tablier & bol -->
+            <path d="M76 130H134L140 176H70L76 130Z" fill="#2A7A43"/>
+            <path d="M84 130H126L130 176H80L84 130Z" fill="#F5FAF5"/>
+            <!-- Bol de légumes frais -->
+            <path d="M106 146H166C166 165 152 178 136 178C120 178 106 165 106 146Z" fill="#FFFFFF"/>
+            <circle cx="124" cy="142" r="9" fill="#63C14B"/>
+            <circle cx="138" cy="139" r="10" fill="#F39C3D"/>
+            <circle cx="151" cy="143" r="8" fill="#E64833"/>
+            <!-- Légumes flottants -->
+            <circle cx="168" cy="92" r="11" fill="#E64833"/>
+            <path d="M165 80L168 84L172 80" stroke="#72D152" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="48" cy="146" r="12" fill="#3D9B48"/>
+            <circle cx="56" cy="139" r="9" fill="#52B75E"/>
+          </svg>
+        </div>
+      </div>
+    </div>
     <form class="addcard" id="loginForm">
-      <input class="field" id="email" type="email" autocomplete="username" placeholder="E-mail" required>
+      <input class="field" id="email" type="email" autocomplete="username" placeholder="E-mail du foyer" required>
       <input class="field" id="pwd" type="password" autocomplete="current-password" placeholder="Mot de passe" required>
-      <button class="btn primary" type="submit">Se connecter</button>
+      <button class="btn primary" type="submit">Se connecter →</button>
       <p class="msg" id="loginMsg"></p>
     </form>
   </div>
 </div>
 
 <div class="wrap" id="appView" hidden>
+  <!-- BANNIÈRE HERO MEALIO -->
+  <header class="mealio-hero" aria-label="Bannière Mealio">
+    <div class="mealio-wm" aria-hidden="true">MEALIO</div>
+    <div class="hero-top">
+      <span class="brand"><span class="brand-leaf">🌿</span>meal<b>io</b></span>
+      <div class="hero-actions">
+        <button type="button" class="hero-chip" id="heroStoreBtn" title="Changer de magasin">🏪 <span id="heroStoreTxt">Leclerc</span> ▾</button>
+        <button type="button" class="hero-icon-btn" id="heroSearchBtn" aria-label="Rechercher une recette">🔍</button>
+      </div>
+    </div>
+    <div class="hero-body">
+      <div>
+        <span class="hero-badge">🌱 Repas sains, Foyer heureux</span>
+        <h2 class="hero-title">Planifiez vos repas.<span>Savourez chaque bouchée.</span></h2>
+        <p class="hero-sub">Recettes express 4-7 ans & adultes, liste par rayon et prix Lidl vs E.Leclerc.</p>
+        <div class="hero-cta-row">
+          <button type="button" class="hero-cta" id="heroCtaBtn">Idées recettes <i>→</i></button>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 200 200" fill="none">
+          <circle cx="105" cy="108" r="68" fill="#A8E86C" fill-opacity="0.22"/>
+          <!-- Feuilles décoratives -->
+          <path d="M26 96C26 84 40 78 46 88C52 98 38 108 26 96Z" fill="#7CE063"/>
+          <path d="M168 48C178 42 188 52 180 62C172 72 158 54 168 48Z" fill="#A8E86C"/>
+          <!-- Toque de chef 3D -->
+          <ellipse cx="105" cy="52" rx="44" ry="26" fill="#FFFFFF"/>
+          <circle cx="76" cy="48" r="22" fill="#F2F8F2"/>
+          <circle cx="105" cy="38" r="26" fill="#FFFFFF"/>
+          <circle cx="134" cy="48" r="22" fill="#F2F8F2"/>
+          <rect x="73" y="62" width="64" height="18" rx="6" fill="#E5F0E6"/>
+          <path d="M105 65C105 65 112 58 116 63C120 68 111 75 105 75C99 75 90 68 94 63C98 58 105 65 105 65Z" fill="#2E854A"/>
+          <!-- Cuillère en bois -->
+          <rect x="36" y="72" width="7" height="58" rx="3.5" transform="rotate(-18 36 72)" fill="#C67D3B"/>
+          <ellipse cx="33" cy="65" rx="12" ry="16" transform="rotate(-18 33 65)" fill="#DA924E"/>
+          <!-- Visage du petit chef -->
+          <rect x="74" y="76" width="62" height="54" rx="26" fill="#FFD7BA"/>
+          <path d="M72 88C72 74 88 68 105 68C122 68 138 74 138 88C130 80 118 78 105 78C92 78 80 80 72 88Z" fill="#4A2C1D"/>
+          <circle cx="91" cy="99" r="6.5" fill="#3B2216"/>
+          <circle cx="89" cy="97" r="2.2" fill="#FFFFFF"/>
+          <path d="M113 99C116 94 123 94 126 99" stroke="#3B2216" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="82" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
+          <circle cx="128" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
+          <path d="M96 111C96 111 100 119 106 119C112 119 116 111 116 111Z" fill="#D94B43"/>
+          <!-- Tablier vert & blanc -->
+          <path d="M76 130H134L140 176H70L76 130Z" fill="#2A7A43"/>
+          <path d="M84 130H126L130 176H80L84 130Z" fill="#F5FAF5"/>
+          <!-- Bol gourmand -->
+          <path d="M104 146H168C168 166 153 179 136 179C119 179 104 166 104 146Z" fill="#FFFFFF"/>
+          <circle cx="122" cy="142" r="9" fill="#63C14B"/>
+          <circle cx="137" cy="139" r="10" fill="#F39C3D"/>
+          <circle cx="152" cy="143" r="8" fill="#E64833"/>
+          <!-- Tomate cerise, brocoli & avocat flottants -->
+          <circle cx="170" cy="92" r="11" fill="#E64833"/>
+          <path d="M167 80L170 84L174 80" stroke="#72D152" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="48" cy="148" r="11" fill="#3D9B48"/>
+          <circle cx="57" cy="141" r="9" fill="#52B75E"/>
+          <ellipse cx="156" cy="182" rx="12" ry="9" fill="#89D656" transform="rotate(-15 156 182)"/>
+          <circle cx="156" cy="182" r="4.5" fill="#6E4226"/>
+        </svg>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-ico">🍃</span><div><b>25+ Recettes</b>Saines & sans porc</div></div>
+      <div class="hstat"><span class="hstat-ico">👶</span><div><b>Enfants 4-7a</b>& adultes ravis</div></div>
+      <div class="hstat"><span class="hstat-ico">💶</span><div><b>Lidl vs Leclerc</b>Prix comparés</div></div>
+    </div>
+  </header>
+
   <!-- LISTE -->
   <section class="page" id="p-liste" aria-label="Liste de courses">
-    <div class="lt"><h1>Liste</h1></div>
+    <div class="lt"><h1>Ma Liste</h1></div>
     <p class="status" id="status" hidden></p>
 
     <div class="sec">
-      <div class="sh"><span>Je suis chez</span></div>
+      <div class="sh"><span>🏪 Je fais mes courses chez</span></div>
       <div class="stores" id="stores"></div>
       <form class="inline" id="storeForm" hidden autocomplete="off">
         <input class="field" id="storeName" placeholder="Nom du magasin" aria-label="Nom du magasin">
@@ -258,21 +445,21 @@ details.others summary::-webkit-details-marker{display:none}
     </div>
 
     <form class="addcard" id="addForm" autocomplete="off">
-      <input class="field" id="addName" placeholder="Article (ex. 2 tomates, 400 g bœuf…)" autocapitalize="sentences" autocorrect="off" spellcheck="false" enterkeyhint="next" aria-label="Article">
+      <input class="field" id="addName" placeholder="➕ Ajouter un article (ex. 2 tomates, 400 g bœuf…)" autocapitalize="sentences" autocorrect="off" spellcheck="false" enterkeyhint="next" aria-label="Article">
       <div class="sugg" id="sugg" hidden></div>
       <div class="addrow">
-        <div class="pricebox"><input class="field" id="addPrice" inputmode="decimal" placeholder="Prix" enterkeyhint="done" aria-label="Prix (facultatif)"><span>€</span></div>
-        <button class="btn primary" type="submit">Ajouter</button>
+        <div class="pricebox"><input class="field" id="addPrice" inputmode="decimal" placeholder="Prix unit." enterkeyhint="done" aria-label="Prix (facultatif)"><span>€</span></div>
+        <button class="btn primary" type="submit">Ajouter →</button>
       </div>
     </form>
 
     <div class="sec" id="oftenSec" hidden>
-      <div class="sh"><span>Souvent achetés</span></div>
+      <div class="sh"><span>⚡ Souvent achetés</span></div>
       <div class="chips" id="often"></div>
     </div>
 
     <div class="sec" id="cmpSec" hidden>
-      <div class="sh"><span>Comparateur</span><span id="cmpSub"></span></div>
+      <div class="sh"><span>💶 Comparateur Lidl / Leclerc</span><span id="cmpSub"></span></div>
       <div class="group" id="cmp"></div>
       <p class="verdict" id="verdict" hidden></p>
       <p class="foot" id="cmpNote" hidden></p>
@@ -280,7 +467,7 @@ details.others summary::-webkit-details-marker{display:none}
 
     <div class="sec">
       <div class="sh">
-        <span>À acheter <strong id="todoCount" style="font-weight:600;text-transform:none"></strong></span>
+        <span>À acheter <strong id="todoCount" style="font-weight:700;text-transform:none"></strong></span>
         <span style="display:flex;gap:12px;align-items:center">
           <button type="button" class="sh-act" id="collapseAllBtn" hidden>Tout réduire</button>
           <button type="button" class="sh-act" id="sortBtn">Par rayon</button>
@@ -291,34 +478,49 @@ details.others summary::-webkit-details-marker{display:none}
     </div>
 
     <div class="sec" id="cartSec" hidden>
-      <div class="sh"><span>Dans le panier</span><span id="cartCount"></span></div>
+      <div class="sh"><span>🛒 Dans le panier</span><span id="cartCount"></span></div>
       <div class="group">
         <div id="cart"></div>
         <div class="cartbar" style="box-shadow:inset 0 .5px 0 var(--sep)"><span>Total estimé</span><b id="cartSum">0 €</b></div>
       </div>
       <p class="foot" id="cartNote"></p>
-      <button class="btn primary" id="finishBtn" type="button">Terminer les courses</button>
+      <button class="btn primary" id="finishBtn" type="button">Terminer les courses →</button>
     </div>
   </section>
 
-  <!-- MENUS -->
+  <!-- MENUS (STYLE MOBILE MEALIO : CALENDRIER HORIZONTAL + CARTE DU JOUR + 4 CATÉGORIES) -->
   <section class="page" id="p-menus" aria-label="Menus" hidden>
-    <div class="lt"><h1>Menus</h1></div>
+    <div class="lt"><h1>Menus de la semaine</h1></div>
     <div class="weeknav">
       <button class="nav" id="wPrev" type="button" aria-label="Semaine précédente">‹</button>
       <strong id="wLbl">—</strong>
       <button class="nav" id="wNext" type="button" aria-label="Semaine suivante">›</button>
     </div>
+
+    <!-- Bandeau 7 jours façon Mealio -->
+    <div class="week-strip" id="weekStrip" role="tablist" aria-label="Jours de la semaine"></div>
+
+    <!-- Carte Repas du jour (Today's Meal) -->
+    <div class="today-card" id="todayCard"></div>
+
+    <!-- 4 Cartes Catégories rapides façon Mealio -->
+    <div class="cat-grid" id="mealioCats">
+      <button type="button" class="cat-card" data-cat="Enfants"><div class="cat-ico">👶</div><span>Enfants 4-7a</span></button>
+      <button type="button" class="cat-card" data-cat="Rapide"><div class="cat-ico">⚡</div><span>Express 15m</span></button>
+      <button type="button" class="cat-card" data-cat="Économique"><div class="cat-ico">💶</div><span>Budget</span></button>
+      <button type="button" class="cat-card" data-cat="Végétarien"><div class="cat-ico">🌱</div><span>Végétarien</span></button>
+    </div>
+
     <div class="sec">
-      <div class="sh"><span>Repas du soir</span><span>Touche 👨‍🍳 pour cuisiner</span></div>
+      <div class="sh"><span>Planning complet de la semaine</span><span>Touche un jour pour changer</span></div>
       <div class="group" id="days"></div>
     </div>
-    <button class="btn primary" id="prepBtn" type="button">Préparer les courses de la semaine</button>
+    <button class="btn primary" id="prepBtn" type="button">🛒 Préparer les courses de la semaine →</button>
   </section>
 
   <!-- PLATS -->
   <section class="page" id="p-plats" aria-label="Plats" hidden>
-    <div class="lt"><h1>Plats</h1><button class="act" id="newPlat" type="button">+ Nouveau</button></div>
+    <div class="lt"><h1>Catalogue de Plats</h1><button class="act" id="newPlat" type="button">+ Nouveau</button></div>
     <input class="field" id="platSearch" style="background:var(--surface)" placeholder="🔍 Rechercher un plat ou un ingrédient (ex. saumon, œufs…)" aria-label="Rechercher un plat">
     <div class="stores" id="platTags"></div>
     <div class="sec">
@@ -331,10 +533,10 @@ details.others summary::-webkit-details-marker{display:none}
   <!-- RECETTES (en quelques lignes ou détaillées) -->
   <section class="page" id="p-recettes" aria-label="Recettes" hidden>
     <div class="lt">
-      <h1>Recettes</h1>
+      <h1>Idées Recettes</h1>
       <button class="act" id="recModeBtn" type="button">Vue : En 3 lignes ⚡</button>
     </div>
-    <input class="field" id="recSearch" style="background:var(--surface)" placeholder="🔍 Plat ou ingrédient (ex. jambon, poulet, courgettes…)" aria-label="Rechercher une recette">
+    <input class="field" id="recSearch" style="background:var(--surface)" placeholder="🔍 Plat ou ingrédient (ex. saumon, poulet, courgettes…)" aria-label="Rechercher une recette">
     <div class="stores" id="recTags"></div>
     <div class="rec-cards" id="recList"></div>
   </section>
@@ -343,13 +545,16 @@ details.others summary::-webkit-details-marker{display:none}
 <nav class="tabbar" id="tabbar" role="tablist" aria-label="Onglets" hidden>
   <button class="tab" role="tab" data-p="liste" aria-selected="true">
     <span class="tab-badge" id="tabBadge" hidden>0</span>
-    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 7h12M11 14h12M11 21h12"/><path d="M4.5 7l1.5 1.5L8.5 5.5M4.5 14l1.5 1.5 2.5-3M4.5 21l1.5 1.5 2.5-3"/></svg>Liste</button>
-  <button class="tab" role="tab" data-p="menus" aria-selected="false">
-    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="20" height="18" rx="3"/><path d="M4 11h20M9 3.5v5M19 3.5v5"/></svg>Menus</button>
-  <button class="tab" role="tab" data-p="plats" aria-selected="false">
-    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3.5v8a2.5 2.5 0 0 0 5 0v-8M10.5 3.5V25"/><path d="M20 25V3.5c-2.5 1.5-3.5 4.5-3.5 8.5 0 2 1.2 3 3.5 3"/></svg>Plats</button>
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 14 5l9 7.5v9.5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9.5Z"/><path d="M11 24v-7h6v7"/></svg>Liste</button>
   <button class="tab" role="tab" data-p="recettes" aria-selected="false">
-    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H22v19H7.5A2.5 2.5 0 0 0 5 24.5v-19Z"/><path d="M5 22a2.5 2.5 0 0 1 2.5-2.5H22"/><path d="M9.5 8.5h8M9.5 12.5h8M9.5 16.5h5"/></svg>Recettes</button>
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H22v19H7.5A2.5 2.5 0 0 0 5 24.5v-19Z"/><path d="M5 22a2.5 2.5 0 0 1 2.5-2.5H22"/><path d="M9.5 8.5h8M9.5 12.5h8M9.5 16.5h5"/></svg>Recettes</button>
+  <div class="fab-wrap">
+    <button type="button" class="fab-add" id="fabAddBtn" aria-label="Action rapide">+</button>
+  </div>
+  <button class="tab" role="tab" data-p="menus" aria-selected="false">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="20" height="18" rx="3"/><path d="M4 11h20M9 3.5v5M19 3.5v5"/></svg>Menus</button>
+  <button class="tab" role="tab" data-p="plats" aria-selected="false">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3.5v8a2.5 2.5 0 0 0 5 0v-8M10.5 3.5V25"/><path d="M20 25V3.5c-2.5 1.5-3.5 4.5-3.5 8.5 0 2 1.2 3 3.5 3"/></svg>Plats</button>
 </nav>
 
 <div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
@@ -852,14 +1057,32 @@ $("overlay").onclick=e=>{ if(e.target===$("overlay")||e.target.closest("[data-cl
   else if(e.target.closest("[data-save]")&&sheetSave) sheetSave(); };
 $("sheet").addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.matches("input:not([type=checkbox])")&&sheetSave){e.preventDefault();sheetSave()} });
 
-// --- Onglets ---
+// --- Onglets & Actions Bannière Mealio ---
 function setTab(t){tab=t;
   $("tabbar").querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.p===t));
   ["liste","menus","plats","recettes"].forEach(p=>$("p-"+p).hidden=p!==t); render(); window.scrollTo(0,0)}
 $("tabbar").onclick=e=>{const b=e.target.closest(".tab");if(b)setTab(b.dataset.p)};
+$("heroCtaBtn").onclick=()=>setTab("recettes");
+$("heroSearchBtn").onclick=()=>{setTab("recettes");setTimeout(()=>$("recSearch")?.focus(),60)};
+$("heroStoreBtn").onclick=()=>{
+  const list=allStores(), idx=(list.indexOf(store)+1)%list.length;
+  store=list[idx]||"Leclerc"; ls.set("courses.magasin",store); render();
+  toast(`Magasin actif : ${store}`);
+};
+$("fabAddBtn").onclick=()=>{
+  if(tab==="liste"){
+    $("addForm")?.scrollIntoView({behavior:"smooth",block:"center"});
+    setTimeout(()=>$("addName")?.focus(),120);
+  } else if(tab==="menus"){
+    openDay(selDayKey||localDate(new Date()));
+  } else {
+    openEditPlat(null);
+  }
+};
 
 // --- Magasins ---
 function renderStores(){
+  if($("heroStoreTxt")) $("heroStoreTxt").textContent=store;
   $("stores").innerHTML=allStores().map(s=>`<button type="button" class="pill" data-s="${esc(s)}" aria-pressed="${s===store}">${esc(s)}</button>`).join("")
     +`<button type="button" class="pill dash" data-s="__new">+ Autre</button>`;
 }
@@ -1130,12 +1353,89 @@ $("finishBtn").onclick=()=>{
   const f=$("tTotal"); f.focus(); f.select();
 };
 
-// --- Menus (le soir) + Accès direct au mode Cuisiner pas à pas ---
+// --- Menus (le soir) + Calendrier horizontal & Carte Repas du jour façon Mealio ---
 const weekDays=()=>Array.from({length:7},(_,i)=>addDays(week,i));
+let selDayKey=localDate(new Date());
 function platOf(m){return m?.platId?plats.find(p=>p.id===m.platId)||null:null}
 function renderMenus(){
   const days=weekDays(), today=localDate(new Date());
+  const keys=days.map(localDate);
+  if(!keys.includes(selDayKey)) selDayKey=keys.includes(today)?today:keys[0];
   $("wLbl").textContent=`Semaine du ${days[0].toLocaleDateString("fr-FR",{day:"numeric",month:"long"})}`;
+
+  // Bandeau horizontal 7 jours façon Mealio (Mon 21 .. Sun 27)
+  if($("weekStrip")){
+    $("weekStrip").innerHTML=days.map(d=>{
+      const k=localDate(d), m=menus[k], has=!!(platOf(m)||m?.texte);
+      const wd=d.toLocaleDateString("fr-FR",{weekday:"short"}).replace(".","");
+      return `<button type="button" class="day-pill${has?" has-meal":""}" role="tab" data-d="${k}" aria-selected="${k===selDayKey}">
+        <span>${esc(wd)}</span>
+        <b>${d.getDate()}</b>
+      </button>`;
+    }).join("");
+  }
+
+  // Carte "Repas du jour" (Today's Meal) façon Mealio
+  if($("todayCard")){
+    const selDate=new Date(selDayKey+"T12:00");
+    const dayTitle=selDayKey===today?"Repas d'aujourd'hui":`Repas du ${selDate.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"short"})}`;
+    const m=menus[selDayKey], p=platOf(m), pers=m?.portions||p?.portions||4;
+    if(p){
+      const cLidl=platCost(p,"Lidl"), cLec=platCost(p,"Leclerc");
+      $("todayCard").innerHTML=`
+        <div class="sh" style="padding:0"><span>${esc(dayTitle)}</span><button type="button" class="sh-act" data-pick="${selDayKey}">Changer →</button></div>
+        <div class="today-banner">
+          <div class="today-info">
+            <div class="today-kicker">🌱 Menu planifié</div>
+            <h3 class="today-title">${esc(p.nom)}</h3>
+            <div class="today-meta">
+              ${p.temps?`<span>⏱ ${p.temps} min</span>`:""}
+              <span>🍽️ ${pers} pers.</span>
+              ${cLidl?`<span>Lidl ≈ ${fmt(cLidl)}</span>`:""}
+              ${cLec?`<span>Leclerc ≈ ${fmt(cLec)}</span>`:""}
+            </div>
+          </div>
+          <div class="today-plate">${p.emoji||"🍽️"}</div>
+        </div>
+        <div class="today-foot">
+          <button type="button" class="view-rec-btn pri" data-cook="${p.id}" data-pers="${pers}">👨‍🍳 Cuisiner pas à pas</button>
+          <button type="button" class="view-rec-btn" data-fiche="${p.id}" data-pers="${pers}">Voir la recette →</button>
+        </div>`;
+    } else if(m?.texte){
+      $("todayCard").innerHTML=`
+        <div class="sh" style="padding:0"><span>${esc(dayTitle)}</span><button type="button" class="sh-act" data-pick="${selDayKey}">Modifier →</button></div>
+        <div class="today-banner">
+          <div class="today-info">
+            <div class="today-kicker">📝 Note repas</div>
+            <h3 class="today-title">${esc(m.texte)}</h3>
+            <div class="today-meta"><span>🍽️ ${pers} pers.</span></div>
+          </div>
+          <div class="today-plate">🍽️</div>
+        </div>`;
+    } else {
+      const suggList=plats.length?plats:BASE_PLATS;
+      const dayIdx=Math.max(0,keys.indexOf(selDayKey));
+      const sugg=suggList[dayIdx%suggList.length];
+      $("todayCard").innerHTML=`
+        <div class="sh" style="padding:0"><span>${esc(dayTitle)}</span><button type="button" class="sh-act" data-pick="${selDayKey}">Tous les plats →</button></div>
+        <div class="today-banner">
+          <div class="today-info">
+            <div class="today-kicker">✨ Suggestion du chef</div>
+            <h3 class="today-title">${sugg?esc(sugg.nom):"Choisir un repas"}</h3>
+            <div class="today-meta">
+              ${sugg?.temps?`<span>⏱ ${sugg.temps} min</span>`:""}
+              <span>👶 Enfants & adultes</span>
+            </div>
+          </div>
+          <div class="today-plate">${sugg?.emoji||"🥗"}</div>
+        </div>
+        <div class="today-foot">
+          ${sugg?`<button type="button" class="view-rec-btn pri" data-quickplan="${sugg.id}" data-d="${selDayKey}">+ Planifier ce plat</button>`:""}
+          <button type="button" class="view-rec-btn" data-pick="${selDayKey}">Choisir un autre →</button>
+        </div>`;
+    }
+  }
+
   $("days").innerHTML=days.map(d=>{
     const k=localDate(d), m=menus[k], p=platOf(m), label=p?p.nom:(m?.texte||"");
     const pers=m?.portions||p?.portions||4;
@@ -1154,10 +1454,36 @@ function renderMenus(){
 }
 $("wPrev").onclick=()=>{week=addDays(week,-7);renderMenus()};
 $("wNext").onclick=()=>{week=addDays(week,7);renderMenus()};
+$("weekStrip")?.addEventListener("click",e=>{
+  const b=e.target.closest("[data-d]"); if(!b) return;
+  if(selDayKey===b.dataset.d) openDay(selDayKey);
+  else { selDayKey=b.dataset.d; renderMenus(); }
+});
+$("todayCard")?.addEventListener("click",e=>{
+  const pk=e.target.closest("[data-pick]");
+  if(pk){ openDay(pk.dataset.pick); return; }
+  const qp=e.target.closest("[data-quickplan]");
+  if(qp){
+    const p=(plats.length?plats:BASE_PLATS).find(x=>x.id===qp.dataset.quickplan);
+    if(p){
+      fs.collection("menus").doc(qp.dataset.d).set({platId:p.id,texte:p.nom,portions:p.portions||4}).catch(fail("Enregistrement"));
+      toast(`${p.nom} planifié !`);
+    }
+    return;
+  }
+  const ck=e.target.closest("[data-cook]");
+  if(ck){ const p=plats.find(x=>x.id===ck.dataset.cook); if(p) openCookMode(p,+ck.dataset.pers||p.portions||4); return; }
+  const fi=e.target.closest("[data-fiche]");
+  if(fi){ const p=plats.find(x=>x.id===fi.dataset.fiche); if(p) openFichePlat(p,+fi.dataset.pers||p.portions||4); }
+});
+$("mealioCats")?.addEventListener("click",e=>{
+  const b=e.target.closest("[data-cat]"); if(!b) return;
+  recTag=b.dataset.cat; setTab("recettes");
+});
 $("days").onclick=e=>{
   const ck=e.target.closest("[data-cook]");
   if(ck){ const p=plats.find(x=>x.id===ck.dataset.cook); if(p) openFichePlat(p,+ck.dataset.pers||p.portions||4); return; }
-  const b=e.target.closest(".day"); if(b) openDay(b.dataset.d);
+  const b=e.target.closest(".day"); if(b){ selDayKey=b.dataset.d; renderMenus(); openDay(b.dataset.d); }
 };
 function openDay(k){
   const m=menus[k], d=new Date(k+"T12:00"), curPlat=platOf(m);
@@ -1535,7 +1861,7 @@ function renderRecettes(){
     return `<article class="rcard" data-id="${p.id}">
       <div class="rcard-top" data-act="fiche">
         <div style="min-width:0;flex:1">
-          <div class="rcard-title"><span>${p.emoji||"🍽️"}</span><span>${esc(p.nom)}</span></div>
+          <div class="rcard-title"><span class="rcard-emo">${p.emoji||"🍽️"}</span><span>${esc(p.nom)}</span></div>
           <div class="pl-meta" style="margin-top:5px">
             ${p.temps?`<span class="tag-badge${p.temps<=20?" fast":""}">⏱ ${p.temps} min</span>`:""}
             ${cLidl?`<span class="tag-badge">Lidl ≈ ${fmt(cLidl)}</span>`:""}
