@@ -368,22 +368,35 @@ const shortDate=s=>s?new Date(s+"T12:00").toLocaleDateString("fr-FR",{day:"numer
 const plural=(n,w)=>`${n} ${w}${n>1?"s":""}`;
 const Q=i=>Math.max(1,i.qty||1);
 
-// --- Rayons façon Jow ---
+// --- Rayons façon Jow + Prix de référence E.Leclerc (en centimes) ---
 const RAYONS=[
-  {id:"fl",ico:"🥬",nom:"Fruits & Légumes",items:"Tomates|Tomates cerises|Pommes de terre|Oignons|Ail|Échalotes|Carottes|Courgettes|Poivrons|Aubergines|Concombre|Salade|Poireaux|Brocolis|Chou-fleur|Haricots verts|Champignons de Paris|Avocats|Citron|Citrons verts|Pommes|Poires|Bananes|Oranges|Clémentines|Raisin|Fraises|Kiwis|Melon|Persil|Coriandre|Menthe"},
-  {id:"vp",ico:"🥩",nom:"Viandes & Poissons",items:"Bœuf haché|Steaks hachés|Escalopes de poulet|Blancs de poulet|Cuisses de poulet|Poulet entier|Merguez|Saucisses|Viande d'agneau|Jambon|Jambon de dinde|Dinde|Lardons|Pavés de saumon|Saumon fumé|Cabillaud|Thon en boîte|Poisson pané|Crevettes|Boulettes de bœuf"},
-  {id:"fc",ico:"🧀",nom:"Frais & Crèmerie",items:"Lait demi-écrémé|Lait entier|Beurre|Crème fraîche|Œufs|Yaourts nature|Yaourts aux fruits|Fromage blanc|Petits-suisses|Emmental râpé|Mozzarella|Comté|Camembert|Parmesan|Chèvre|Fromage en tranches|Crème dessert|Pâte feuilletée|Pâte brisée|Pâte à pizza"},
-  {id:"ep",ico:"🍝",nom:"Épicerie",items:"Pâtes|Spaghettis|Tagliatelles|Coquillettes|Penne|Pâtes à lasagnes|Riz|Riz basmati|Semoule|Farine|Sucre|Sel|Poivre|Huile d'olive|Huile de tournesol|Vinaigre|Moutarde|Ketchup|Mayonnaise|Sauce tomate|Concentré de tomates|Tomates pelées|Lait de coco|Curry|Cumin|Paprika|Ras el hanout|Bouillon cube|Pois chiches|Lentilles|Haricots rouges|Maïs|Olives vertes|Citrons confits|Céréales|Biscuits|Chocolat|Confiture|Pâte à tartiner|Miel|Café|Thé|Chapelure|Pain de mie|Pain|Baguette|Brioche|Galettes de blé (wraps)|Compotes|Chips|Gâteaux apéritif|Sauce blanche"},
-  {id:"su",ico:"🧊",nom:"Surgelés",items:"Frites surgelées|Légumes surgelés|Épinards surgelés|Pizza surgelée|Glaces"},
-  {id:"bo",ico:"🧃",nom:"Boissons",items:"Eau|Eau gazeuse|Jus d'orange|Jus de pomme|Sirop|Soda|Coca"},
-  {id:"mh",ico:"🧻",nom:"Maison & Hygiène",items:"Papier toilette|Essuie-tout|Mouchoirs|Liquide vaisselle|Pastilles lave-vaisselle|Lessive|Adoucissant|Éponges|Sacs poubelle|Gel douche|Shampooing|Dentifrice|Brosses à dents|Déodorant|Couches|Lingettes|Coton|Papier aluminium|Film alimentaire"},
+  {id:"fl",ico:"🥬",nom:"Fruits & Légumes",items:"Tomates:249|Tomates cerises:149|Pommes de terre:299|Oignons:159|Ail:169|Échalotes:149|Carottes:139|Courgettes:229|Poivrons:219|Aubergines:129|Concombre:99|Salade:119|Poireaux:229|Brocolis:179|Chou-fleur:249|Haricots verts:189|Champignons de Paris:169|Avocats:229|Citron:159|Citrons verts:169|Pommes:249|Poires:259|Bananes:199|Oranges:269|Clémentines:249|Raisin:239|Fraises:299|Kiwis:229|Melon:249|Persil:119|Coriandre:119|Menthe:119"},
+  {id:"vp",ico:"🥩",nom:"Viandes & Poissons",items:"Bœuf haché:429|Steaks hachés:449|Escalopes de poulet:489|Blancs de poulet:469|Cuisses de poulet:499|Poulet entier:599|Merguez:349|Saucisses:329|Viande d'agneau:690|Jambon:219|Jambon de dinde:189|Dinde:459|Lardons:169|Pavés de saumon:589|Saumon fumé:549|Cabillaud:479|Thon en boîte:159|Poisson pané:239|Crevettes:329|Boulettes de bœuf:349"},
+  {id:"fc",ico:"🧀",nom:"Frais & Crèmerie",items:"Lait demi-écrémé:95|Lait entier:109|Beurre:219|Crème fraîche:139|Œufs:289|Yaourts nature:179|Yaourts aux fruits:239|Fromage blanc:135|Petits-suisses:165|Emmental râpé:159|Mozzarella:95|Comté:449|Camembert:155|Parmesan:219|Chèvre:169|Fromage en tranches:139|Crème dessert:115|Pâte feuilletée:125|Pâte brisée:115|Pâte à pizza:129"},
+  {id:"ep",ico:"🍝",nom:"Épicerie",items:"Pâtes:105|Spaghettis:105|Tagliatelles:129|Coquillettes:105|Penne:105|Pâtes à lasagnes:159|Riz:169|Riz basmati:258|Semoule:165|Farine:95|Sucre:129|Sel:69|Poivre:149|Huile d'olive:799|Huile de tournesol:189|Vinaigre:119|Moutarde:129|Ketchup:145|Mayonnaise:155|Sauce tomate:109|Concentré de tomates:79|Tomates pelées:99|Lait de coco:119|Curry:139|Cumin:139|Paprika:139|Ras el hanout:149|Bouillon cube:95|Pois chiches:105|Lentilles:139|Haricots rouges:105|Maïs:95|Olives vertes:129|Citrons confits:229|Céréales:189|Biscuits:139|Chocolat:179|Confiture:159|Pâte à tartiner:229|Miel:349|Café:289|Thé:149|Chapelure:99|Pain de mie:125|Pain:145|Baguette:85|Brioche:189|Galettes de blé (wraps):159|Compotes:169|Chips:115|Gâteaux apéritif:129|Sauce blanche:159"},
+  {id:"su",ico:"🧊",nom:"Surgelés",items:"Frites surgelées:259|Légumes surgelés:249|Épinards surgelés:179|Pizza surgelée:239|Glaces:269"},
+  {id:"bo",ico:"🧃",nom:"Boissons",items:"Eau:145|Eau gazeuse:210|Jus d'orange:169|Jus de pomme:139|Sirop:219|Soda:129|Coca:215"},
+  {id:"mh",ico:"🧻",nom:"Maison & Hygiène",items:"Papier toilette:289|Essuie-tout:219|Mouchoirs:129|Liquide vaisselle:149|Pastilles lave-vaisselle:369|Lessive:429|Adoucissant:199|Éponges:125|Sacs poubelle:139|Gel douche:129|Shampooing:149|Dentifrice:109|Brosses à dents:149|Déodorant:159|Couches:690|Lingettes:119|Coton:99|Papier aluminium:169|Film alimentaire:129"},
   {id:"au",ico:"🛒",nom:"Autres",items:""}
 ];
 const RAYON_MAP=new Map();
+const LECLERC_PRICES={}; // key -> centimes
+const CATALOGUE_NOM={};  // key -> nom canonique
 const CATALOGUE=[];
 RAYONS.forEach(r=>{
   if(!r.items) return;
-  r.items.split("|").forEach(nom=>{ CATALOGUE.push(nom); RAYON_MAP.set(keyOf(nom),r.id); });
+  r.items.split("|").forEach(entry=>{
+    const [nom,pStr]=entry.split(":");
+    const k=keyOf(nom), c=parseInt(pStr,10)||0;
+    CATALOGUE.push(nom);
+    CATALOGUE_NOM[k]=nom;
+    RAYON_MAP.set(k,r.id);
+    if(c>0) LECLERC_PRICES[k]=c;
+  });
+});
+// Synonymes fréquents dans les recettes (singulier / pluriel)
+[["oignon","oignons"],["carotte","carottes"],["tomate","tomates"],["pomme-de-terre","pommes-de-terre"],["courgette","courgettes"],["oeuf","oeufs"]].forEach(([a,b])=>{
+  if(LECLERC_PRICES[b]&&!LECLERC_PRICES[a]) LECLERC_PRICES[a]=LECLERC_PRICES[b];
 });
 function guessRayon(key){
   if(RAYON_MAP.has(key)) return RAYON_MAP.get(key);
@@ -629,11 +642,25 @@ function enrichPlat(p){
 }
 
 let items=[], produits={}, plats=[], menus={}, extraStores=[], seeding=false;
-let store=ls.get("courses.magasin","Lidl"), tab="liste", week=weekStart(new Date());
+let store=ls.get("courses.magasin","Leclerc"), tab="liste", week=weekStart(new Date());
 let sortByRayon=ls.get("courses.tri","rayon")==="rayon";
 let activeTag="", platQuery="";
 const allStores=()=>[...BASE_STORES,...extraStores.filter(s=>!BASE_STORES.includes(s))];
-const priceOf=(key,s)=>produits[key]?.prix?.[s]||null; // {c: centimes, d: date}
+const priceOf=(key,s)=>{
+  const saved=produits[key]?.prix?.[s];
+  if(saved) return saved;
+  if(s==="Leclerc"&&LECLERC_PRICES[key]) return {c:LECLERC_PRICES[key],d:"2026-11-10",ref:true};
+  return null;
+};
+function platCost(p){
+  let sum=0, n=0;
+  (p.ingredients||[]).forEach(raw=>{
+    const parsed=parseEntry(raw), k=keyOf(parsed.nom);
+    const pr=priceOf(k,store)||priceOf(k,"Leclerc");
+    if(pr){ sum+=pr.c; n++; }
+  });
+  return n?sum:0;
+}
 
 // --- Message bas d'écran (avec « Annuler » si besoin) ---
 let toastT, toastUndo=null;
@@ -1071,18 +1098,21 @@ function renderPlats(){
     return true;
   }).sort((a,b)=>a.nom.localeCompare(b.nom,"fr"));
 
-  $("plats").innerHTML=list.length?list.map(p=>`<button type="button" class="pl" data-id="${p.id}">
+  $("plats").innerHTML=list.length?list.map(p=>{
+    const cost=platCost(p);
+    return `<button type="button" class="pl" data-id="${p.id}">
     <div class="pl-ico">${p.emoji||"🍽️"}</div>
     <div class="pl-main">
       <span class="pl-title">${esc(p.nom)}</span>
       <span class="pl-meta">
         ${p.temps?`<span class="tag-badge${p.temps<=20?" fast":""}">⏱ ${p.temps} min</span>`:""}
+        ${cost?`<span class="tag-badge">💶 ≈ ${fmt(cost)}</span>`:""}
         ${(p.tags||[]).map(t=>`<span class="tag-badge">${esc(t)}</span>`).join("")}
         <span>${plural((p.ingredients||[]).length,"ingr.")}${p.etapes?.length?` · ${p.etapes.length} étapes`:""}</span>
       </span>
     </div>
     <small>›</small>
-  </button>`).join("")
+  </button>`}).join("")
     :`<p class="empty">${platQuery||activeTag?"Aucun plat ne correspond à ta recherche.":"Aucun plat. Touche « + Nouveau » pour en créer un."}</p>`;
 }
 $("newPlat").onclick=()=>openEditPlat(null);
@@ -1109,6 +1139,7 @@ function openFichePlat(p,initPers){
         <h3>${esc(p.nom)}</h3>
         <div class="rec-meta" style="margin-top:6px">
           ${p.temps?`<span class="tag-badge${p.temps<=20?" fast":""}">⏱ ${p.temps} min</span>`:""}
+          ${platCost(p)?`<span class="tag-badge">💶 ≈ ${fmt(platCost(p))} chez Leclerc</span>`:""}
           ${(p.tags||[]).map(t=>`<span class="tag-badge">${esc(t)}</span>`).join("")}
         </div>
       </div>
@@ -1274,15 +1305,21 @@ function openEditPlat(p){
     fs.collection("plats").doc(p.id).delete().catch(fail("Suppression")); closeSheet(); toast(`${p.nom} supprimé`)}}
 }
 
-// Ajoute ou enrichit une seule fois les 15 plats de base (identifiants fixes : pas de doublon entre téléphones)
+// Ajoute ou enrichit une seule fois les 15 plats de base + les 118 prix E.Leclerc dans Firestore
 function seedBasePlats(){
   if(seeding) return; seeding=true;
-  const b=fs.batch();
+  const b=fs.batch(), today=localDate(new Date());
   BASE_PLATS.forEach(p=>{
     const {id,...data}=p;
     b.set(fs.collection("plats").doc(id),data,{merge:true});
   });
-  b.set(fs.collection("reglages").doc("courses"),{basePlats:true,basePlatsV2:true},{merge:true});
+  Object.entries(CATALOGUE_NOM).forEach(([k,nom])=>{
+    const c=LECLERC_PRICES[k];
+    if(c&&!produits[k]?.prix?.Leclerc){
+      b.set(fs.collection("produits").doc(k),{nom:produits[k]?.nom||nom,prix:{Leclerc:{c,d:today}}},{merge:true});
+    }
+  });
+  b.set(fs.collection("reglages").doc("courses"),{basePlats:true,basePlatsV2:true,leclercPricesV1:true},{merge:true});
   b.commit().catch(()=>{seeding=false});
 }
 
@@ -1313,9 +1350,9 @@ function start(){
   unsub.push(fs.collection("menus").onSnapshot(s=>{menus=Object.fromEntries(s.docs.map(d=>[d.id,d.data()]));render();done()},err));
   unsub.push(fs.collection("reglages").doc("courses").onSnapshot(d=>{
     const x=d.exists?d.data():{}; extraStores=x.magasins||[]; render()},()=>{}));
-  // Plats de base enrichis (v2) : on vérifie en ligne s'ils ont déjà été enrichis
+  // Plats de base enrichis (v2) + Prix E.Leclerc : on vérifie en ligne s'ils ont déjà été ajoutés
   fs.collection("reglages").doc("courses").get({source:"server"})
-    .then(d=>{ if(!(d.exists&&d.data().basePlatsV2)) seedBasePlats(); })
+    .then(d=>{ if(!(d.exists&&d.data().basePlatsV2&&d.data().leclercPricesV1)) seedBasePlats(); })
     .catch(()=>{});
 }
 </script>
