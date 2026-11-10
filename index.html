@@ -53,11 +53,13 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-vi
 .group{background:var(--surface);border-radius:12px;overflow:hidden}
 .foot{font-size:13px;color:var(--muted);padding:0 16px;margin:0}
 .empty{padding:16px;color:var(--muted);font-size:15px;margin:0}
-/* rayons (façon Jow) */
-.aisles{display:flex;flex-direction:column;gap:14px}
+/* rayons (façon Jow) - pliables */
+.aisles{display:flex;flex-direction:column;gap:12px}
 .aisle{display:flex;flex-direction:column;gap:6px}
-.aisle-hd{display:flex;justify-content:space-between;align-items:center;padding:0 14px;font-size:14px;font-weight:600;color:var(--fg)}
-.aisle-hd small{font-weight:500;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.aisle-hd{width:100%;border:0;background:var(--surface);border-radius:10px;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;font-size:15px;font-weight:600;color:var(--fg);text-align:left}
+.aisle-hd small{font-weight:500;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:6px}
+.aisle-chev{display:inline-block;transition:transform .18s ease;font-size:14px;color:var(--accent)}
+.aisle.closed .aisle-chev{transform:rotate(-90deg)}
 /* magasins & filtres */
 .stores{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px}
 .stores::-webkit-scrollbar{display:none}
@@ -166,8 +168,20 @@ textarea.field{resize:vertical;line-height:1.45}
 .cook-step-txt{font-size:21px;line-height:1.45;font-weight:500;margin:6px 0}
 .timer-pill{align-self:flex-start;border:0;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:9px 16px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;gap:8px}
 .timer-pill.run{background:var(--pos-soft);color:var(--pos)}
-/* barre d'onglets */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);box-shadow:0 -.5px 0 var(--sep);display:grid;grid-template-columns:repeat(3,1fr);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+/* barre d'onglets + cartes recettes express */
+.rec-cards{display:flex;flex-direction:column;gap:12px}
+.rcard{background:var(--surface);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.rcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer}
+.rcard-title{font-weight:700;font-size:18px;display:flex;align-items:center;gap:8px}
+.rcard-ings{font-size:14px;color:var(--muted);line-height:1.4}
+.rcard-ings b{color:var(--fg);font-weight:600}
+.rcard-short{background:var(--fill);border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.45;display:flex;flex-direction:column;gap:4px}
+.rcard-short div{display:flex;gap:8px;align-items:baseline}
+.rcard-short b{color:var(--accent);font-size:13px;flex:none}
+.rcard-acts{display:flex;gap:8px;flex-wrap:wrap;padding-top:2px}
+.rcard-btn{border:0;background:var(--fill);color:var(--fg);border-radius:9px;padding:8px 12px;font-size:14px;font-weight:600}
+.rcard-btn.pri{background:var(--accent-soft);color:var(--accent)}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);box-shadow:0 -.5px 0 var(--sep);display:grid;grid-template-columns:repeat(4,1fr);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
 .tab{position:relative;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;font-size:11px;font-weight:500;color:var(--muted)}
 .tab svg{width:28px;height:28px}
 .tab[aria-selected="true"]{color:var(--accent)}
@@ -267,10 +281,13 @@ details.others summary::-webkit-details-marker{display:none}
     <div class="sec">
       <div class="sh">
         <span>À acheter <strong id="todoCount" style="font-weight:600;text-transform:none"></strong></span>
-        <button type="button" class="sh-act" id="sortBtn">Par rayon</button>
+        <span style="display:flex;gap:12px;align-items:center">
+          <button type="button" class="sh-act" id="collapseAllBtn" hidden>Tout réduire</button>
+          <button type="button" class="sh-act" id="sortBtn">Par rayon</button>
+        </span>
       </div>
       <div id="todoWrap"></div>
-      <p class="foot" id="swipeHint">Glisse un article vers la gauche pour le supprimer. Touche son prix pour le modifier ou changer de rayon.</p>
+      <p class="foot" id="swipeHint">Touche un rayon pour le réduire/déplier. Glisse un article vers la gauche pour le supprimer.</p>
     </div>
 
     <div class="sec" id="cartSec" hidden>
@@ -306,9 +323,20 @@ details.others summary::-webkit-details-marker{display:none}
     <div class="stores" id="platTags"></div>
     <div class="sec">
       <div class="group" id="plats"></div>
-      <p class="foot">Touche un plat pour voir sa fiche recette Marmiton, ajuster les portions ou lancer le mode « Cuisiner pas à pas ».</p>
+      <p class="foot">Touche un plat pour voir sa fiche recette, ajuster les portions ou lancer le mode « Cuisiner pas à pas ».</p>
     </div>
     <button class="logout" id="logout" type="button">Se déconnecter</button>
+  </section>
+
+  <!-- RECETTES (en quelques lignes ou détaillées) -->
+  <section class="page" id="p-recettes" aria-label="Recettes" hidden>
+    <div class="lt">
+      <h1>Recettes</h1>
+      <button class="act" id="recModeBtn" type="button">Vue : En 3 lignes ⚡</button>
+    </div>
+    <input class="field" id="recSearch" style="background:var(--surface)" placeholder="🔍 Plat ou ingrédient (ex. jambon, poulet, courgettes…)" aria-label="Rechercher une recette">
+    <div class="stores" id="recTags"></div>
+    <div class="rec-cards" id="recList"></div>
   </section>
 </div>
 
@@ -320,6 +348,8 @@ details.others summary::-webkit-details-marker{display:none}
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="20" height="18" rx="3"/><path d="M4 11h20M9 3.5v5M19 3.5v5"/></svg>Menus</button>
   <button class="tab" role="tab" data-p="plats" aria-selected="false">
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3.5v8a2.5 2.5 0 0 0 5 0v-8M10.5 3.5V25"/><path d="M20 25V3.5c-2.5 1.5-3.5 4.5-3.5 8.5 0 2 1.2 3 3.5 3"/></svg>Plats</button>
+  <button class="tab" role="tab" data-p="recettes" aria-selected="false">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H22v19H7.5A2.5 2.5 0 0 0 5 24.5v-19Z"/><path d="M5 22a2.5 2.5 0 0 1 2.5-2.5H22"/><path d="M9.5 8.5h8M9.5 12.5h8M9.5 16.5h5"/></svg>Recettes</button>
 </nav>
 
 <div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
@@ -371,7 +401,7 @@ const Q=i=>Math.max(1,i.qty||1);
 // --- Rayons façon Jow + Prix de référence E.Leclerc et Lidl (en centimes : Nom:Leclerc:Lidl) ---
 const RAYONS=[
   {id:"fl",ico:"🥬",nom:"Fruits & Légumes",items:"Tomates:249:229|Tomates cerises:149:129|Pommes de terre:299:279|Oignons:159:139|Ail:169:149|Échalotes:149:139|Carottes:139:119|Courgettes:229:199|Poivrons:219:199|Aubergines:129:119|Concombre:99:89|Salade:119:99|Poireaux:229:199|Brocolis:179:159|Chou-fleur:249:229|Haricots verts:189:169|Champignons de Paris:169:149|Avocats:229:199|Citron:159:149|Citrons verts:169:159|Pommes:249:229|Poires:259:239|Bananes:199:189|Oranges:269:249|Clémentines:249:229|Raisin:239:219|Fraises:299:279|Kiwis:229:199|Melon:249:229|Persil:119:99|Coriandre:119:99|Menthe:119:99"},
-  {id:"vp",ico:"🥩",nom:"Viandes & Poissons",items:"Bœuf haché:429:419|Steaks hachés:449:429|Escalopes de poulet:489:469|Blancs de poulet:469:449|Cuisses de poulet:499:479|Poulet entier:599:579|Merguez:349:329|Saucisses:329:319|Viande d'agneau:690:679|Jambon:219:199|Jambon de dinde:189:179|Dinde:459:439|Lardons:169:149|Pavés de saumon:589:569|Saumon fumé:549:449|Cabillaud:479:459|Thon en boîte:159:145|Poisson pané:239:219|Crevettes:329:299|Boulettes de bœuf:349:329"},
+  {id:"vp",ico:"🥩",nom:"Viandes & Poissons",items:"Bœuf haché:429:419|Steaks hachés:449:429|Escalopes de poulet:489:469|Blancs de poulet:469:449|Cuisses de poulet:499:479|Poulet entier:599:579|Merguez:349:329|Saucisses:329:319|Viande d'agneau:690:679|Dinde:459:439|Pavés de saumon:589:569|Saumon fumé:549:449|Cabillaud:479:459|Thon en boîte:159:145|Poisson pané:239:219|Crevettes:329:299|Boulettes de bœuf:349:329"},
   {id:"fc",ico:"🧀",nom:"Frais & Crèmerie",items:"Lait demi-écrémé:95:95|Lait entier:109:109|Beurre:219:215|Crème fraîche:139:119|Œufs:289:249|Yaourts nature:179:169|Yaourts aux fruits:239:219|Fromage blanc:135:125|Petits-suisses:165:155|Emmental râpé:159:169|Mozzarella:95:89|Comté:449:439|Camembert:155:145|Parmesan:219:199|Chèvre:169:159|Fromage en tranches:139:129|Crème dessert:115:105|Pâte feuilletée:125:109|Pâte brisée:115:99|Pâte à pizza:129:115"},
   {id:"ep",ico:"🍝",nom:"Épicerie",items:"Pâtes:105:89|Spaghettis:105:89|Tagliatelles:129:109|Coquillettes:105:89|Penne:105:89|Pâtes à lasagnes:159:139|Riz:169:149|Riz basmati:258:219|Semoule:165:149|Farine:95:75|Sucre:129:99|Sel:69:59|Poivre:149:129|Huile d'olive:799:649|Huile de tournesol:189:169|Vinaigre:119:99|Moutarde:129:109|Ketchup:145:129|Mayonnaise:155:139|Sauce tomate:109:95|Concentré de tomates:79:69|Tomates pelées:99:85|Lait de coco:119:109|Curry:139:119|Cumin:139:119|Paprika:139:119|Ras el hanout:149:129|Bouillon cube:95:85|Pois chiches:105:95|Lentilles:139:125|Haricots rouges:105:95|Maïs:95:85|Olives vertes:129:115|Citrons confits:229:219|Céréales:189:169|Biscuits:139:119|Chocolat:179:159|Confiture:159:139|Pâte à tartiner:229:199|Miel:349:319|Café:289:299|Thé:149:129|Chapelure:99:89|Pain de mie:125:109|Pain:145:129|Baguette:85:79|Brioche:189:169|Galettes de blé (wraps):159:139|Compotes:169:149|Chips:115:99|Gâteaux apéritif:129:115|Sauce blanche:159:145"},
   {id:"su",ico:"🧊",nom:"Surgelés",items:"Frites surgelées:259:199|Légumes surgelés:249:219|Épinards surgelés:179:159|Pizza surgelée:239:219|Glaces:269:239"},
@@ -450,8 +480,9 @@ function formatMeasure(val,unit){
   return u?`${str} ${u}`:`×${str}`;
 }
 
-// --- 15 Plats de base enrichis façon Marmiton / Jow (temps, portions, tags, quantités, étapes) ---
+// --- 25 Plats de base enrichis façon Marmiton / Jow / CuisineAZ / HelloFresh ---
 const ALL_TAGS=[
+  {id:"Enfants",lbl:"👶 Enfants 4-7 ans"},
   {id:"Rapide",lbl:"⚡ Rapide"},
   {id:"Familial",lbl:"👨‍👩‍👧 Familial"},
   {id:"Économique",lbl:"💶 Économique"},
@@ -460,8 +491,9 @@ const ALL_TAGS=[
 ];
 const BASE_PLATS=[
   {
-    id:"base-01", nom:"Pâtes au saumon", emoji:"🍝", temps:15, portions:4, tags:["Rapide","Familial"],
+    id:"base-01", nom:"Pâtes au saumon", emoji:"🍝", temps:15, portions:4, tags:["Enfants","Rapide","Familial"],
     ingredients:["400 g de Tagliatelles","200 g de Saumon fumé","20 cl de Crème fraîche","1 Citron"],
+    resume:["Cuire les tagliatelles 9 min à l'eau bouillante salée.","Couper le saumon fumé en lanières et chauffer la crème 2 min avec un trait de citron.","Mélanger pâtes, crème et saumon hors du feu."],
     etapes:[
       "Fais cuire les tagliatelles dans un grand volume d'eau bouillante salée pendant 9 minutes.",
       "Pendant ce temps, détaille le saumon fumé en lanières.",
@@ -470,8 +502,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-02", nom:"Escalope de poulet et riz", emoji:"🍗", temps:20, portions:4, tags:["Rapide","Familial"],
+    id:"base-02", nom:"Escalope de poulet et riz", emoji:"🍗", temps:20, portions:4, tags:["Enfants","Rapide","Familial"],
     ingredients:["4 Escalopes de poulet","300 g de Riz","20 cl de Crème fraîche","250 g de Champignons de Paris"],
+    resume:["Cuire le riz 11 min à l'eau bouillante.","Dorer le poulet coupé en dés 6 min à la poêle, puis ajouter les champignons émincés 5 min.","Verser la crème fraîche, mijoter 2 min et servir avec le riz."],
     etapes:[
       "Lance la cuisson du riz dans une casserole d'eau bouillante salée pendant 11 minutes.",
       "Nettoie et émince les champignons de Paris, puis coupe les escalopes de poulet en aiguillettes.",
@@ -480,8 +513,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-03", nom:"Lasagnes", emoji:"🧀", temps:45, portions:4, tags:["Familial","Four"],
+    id:"base-03", nom:"Lasagnes", emoji:"🧀", temps:45, portions:4, tags:["Enfants","Familial","Four"],
     ingredients:["400 g de Bœuf haché","1 boîte de Pâtes à lasagnes","500 g de Sauce tomate","2 Oignons","50 cl de Lait demi-écrémé","150 g de Emmental râpé"],
+    resume:["Revenir oignons et bœuf haché 5 min, ajouter la sauce tomate et mijoter 10 min.","Alterner dans un plat : sauce, feuilles de lasagnes, lait/béchamel et emmental râpé.","Enfourner 25 min à 190 °C jusqu'à ce que ce soit bien gratiné."],
     etapes:[
       "Préchauffe le four à 190 °C. Émince les oignons et fais-les revenir 5 minutes à la poêle avec le bœuf haché.",
       "Ajoute la sauce tomate, sale, poivre et laisse mijoter 10 minutes à feu doux.",
@@ -490,18 +524,20 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-04", nom:"Poulet curry", emoji:"🍛", temps:20, portions:4, tags:["Rapide","Familial"],
+    id:"base-04", nom:"Poulet curry doux coco", emoji:"🍛", temps:20, portions:4, tags:["Enfants","Rapide","Familial"],
     ingredients:["500 g de Blancs de poulet","40 cl de Lait de coco","1 c. à s. de Curry","2 Oignons","300 g de Riz"],
+    resume:["Cuire le riz 11 min.","Dorer les dés de poulet et les oignons 6 min avec une pointe de curry doux.","Verser le lait de coco, mijoter 8 min et servir sur le riz."],
     etapes:[
       "Fais cuire le riz dans l'eau bouillante salée pendant 11 minutes.",
       "Émince les oignons et coupe les blancs de poulet en dés.",
-      "Dans une sauteuse, fais dorer les oignons et le poulet pendant 6 minutes, puis saupoudre le curry et mélange 1 minute.",
+      "Dans une sauteuse, fais dorer les oignons et le poulet pendant 6 minutes, puis saupoudre le curry doux et mélange 1 minute.",
       "Verse le lait de coco, laisse mijoter à feu moyen pendant 8 minutes pour que la sauce devienne bien onctueuse, et sers sur le riz."
     ]
   },
   {
-    id:"base-05", nom:"Hachis parmentier", emoji:"🥘", temps:40, portions:4, tags:["Familial","Four","Économique"],
+    id:"base-05", nom:"Hachis parmentier", emoji:"🥘", temps:40, portions:4, tags:["Enfants","Familial","Four","Économique"],
     ingredients:["400 g de Bœuf haché","800 g de Pommes de terre","2 Oignons","20 cl de Lait demi-écrémé","30 g de Beurre","100 g de Emmental râpé"],
+    resume:["Cuire les pommes de terre 20 min et les écraser en purée avec lait et beurre.","Revenir le bœuf haché et les oignons 8 min à la poêle.","Étaler la viande puis la purée dans un plat, couvrir d'emmental et gratiner 15 min à 200 °C."],
     etapes:[
       "Épluche et coupe les pommes de terre en morceaux, puis fais-les cuire 20 minutes dans l'eau bouillante salée.",
       "Pendant ce temps, fais revenir les oignons émincés et le bœuf haché à la poêle pendant 8 minutes. Préchauffe le four à 200 °C.",
@@ -510,8 +546,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-06", nom:"Spaghettis bolognaise", emoji:"🍝", temps:25, portions:4, tags:["Familial","Économique"],
+    id:"base-06", nom:"Spaghettis bolognaise", emoji:"🍝", temps:25, portions:4, tags:["Enfants","Familial","Économique"],
     ingredients:["400 g de Spaghettis","400 g de Bœuf haché","400 g de Sauce tomate","2 Oignons","2 Carottes","80 g de Parmesan"],
+    resume:["Faire revenir oignons et carottes en petits dés 5 min, puis dorer le bœuf haché 5 min.","Ajouter la sauce tomate et mijoter 10 min à couvert.","Cuire les spaghettis 9 min et servir avec la sauce et le parmesan."],
     etapes:[
       "Épluche et coupe finement les oignons et les carottes en petits dés.",
       "Fais-les revenir 5 minutes dans une sauteuse avec un filet d'huile d'olive, puis ajoute le bœuf haché et fais dorer 5 minutes.",
@@ -522,6 +559,7 @@ const BASE_PLATS=[
   {
     id:"base-07", nom:"Tajine de poulet", emoji:"🍲", temps:45, portions:4, tags:["Familial"],
     ingredients:["4 Cuisses de poulet","2 Oignons","2 Citrons confits","150 g de Olives vertes","1 c. à s. de Ras el hanout","1 bouquet de Coriandre"],
+    resume:["Dorer les cuisses de poulet et les oignons 8 min en cocotte.","Ajouter ras el hanout, citrons confits et un verre d'eau ; mijoter 30 min à couvert.","Ajouter les olives 5 min avant la fin et parsemer de coriandre."],
     etapes:[
       "Dans une cocotte, fais dorer les cuisses de poulet avec les oignons émincés pendant 8 minutes.",
       "Ajoute le ras el hanout, les citrons confits coupés en quartiers et un grand verre d'eau.",
@@ -530,18 +568,20 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-08", nom:"Croque-monsieur", emoji:"🥪", temps:15, portions:4, tags:["Rapide","Économique","Four"],
-    ingredients:["8 tranches de Pain de mie","4 tranches de Jambon","8 Fromage en tranches","30 g de Beurre","1 Salade"],
+    id:"base-08", nom:"Coquillettes crémeuses au fromage (Mac & Cheese)", emoji:"🧀", temps:12, portions:4, tags:["Enfants","Rapide","Végétarien","Économique","Familial"],
+    ingredients:["400 g de Coquillettes","20 cl de Crème fraîche","150 g de Emmental râpé","30 g de Beurre"],
+    resume:["Cuire les coquillettes 8 min à l'eau bouillante salée puis égoutter.","Incorporer sur feu doux le beurre, la crème fraîche et l'emmental râpé.","Mélanger 1 min jusqu'à obtenir une sauce au fromage ultra-fondante."],
     etapes:[
-      "Préchauffe le four à 200 °C (ou prépare l'appareil à croque-monsieur).",
-      "Beurre légèrement les tranches de pain de mie.",
-      "Sur 4 tranches, dépose une tranche de fromage, une tranche de jambon, puis une seconde tranche de fromage avant de refermer.",
-      "Enfourne pendant 10 minutes jusqu'à ce que les croques soient bien dorés et fondants. Sers avec la salade verte."
+      "Fais cuire les coquillettes 8 minutes dans une grande casserole d'eau bouillante salée, puis égoutte-les.",
+      "Remets les pâtes dans la casserole à feu très doux avec le beurre et la crème fraîche.",
+      "Ajoute l'emmental râpé, sale légèrement et poivre.",
+      "Mélange pendant 1 à 2 minutes jusqu'à ce que le fromage soit complètement fondu et enrobe bien les coquillettes."
     ]
   },
   {
-    id:"base-09", nom:"Omelette et pommes de terre", emoji:"🍳", temps:20, portions:4, tags:["Rapide","Végétarien","Économique"],
+    id:"base-09", nom:"Omelette et pommes de terre", emoji:"🍳", temps:20, portions:4, tags:["Enfants","Rapide","Végétarien","Économique"],
     ingredients:["8 Œufs","600 g de Pommes de terre","1 Oignon"],
+    resume:["Couper les pommes de terre en petits dés et les sauter 12 min à la poêle avec l'oignon.","Battre les 8 œufs salés et poivrés et les verser dans la poêle.","Cuire 4 à 5 min à feu moyen."],
     etapes:[
       "Épluche et coupe les pommes de terre en petits dés et émince l'oignon.",
       "Fais-les sauter dans une grande poêle avec un filet d'huile à couvert pendant 12 minutes en remuant régulièrement jusqu'à ce qu'elles soient dorées et fondantes.",
@@ -550,8 +590,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-10", nom:"Saumon et haricots verts", emoji:"🐟", temps:15, portions:4, tags:["Rapide"],
+    id:"base-10", nom:"Saumon et haricots verts", emoji:"🐟", temps:15, portions:4, tags:["Enfants","Rapide"],
     ingredients:["4 Pavés de saumon","500 g de Haricots verts","1 Citron"],
+    resume:["Cuire les haricots verts 10 min à l'eau bouillante.","Poêler les pavés de saumon 4 min côté peau puis 3 min sur l'autre face.","Servir avec un filet de citron."],
     etapes:[
       "Fais cuire les haricots verts 10 minutes dans une casserole d'eau bouillante salée (ou à la vapeur), puis égoutte-les.",
       "Dans une poêle chaude avec un filet d'huile d'olive, saisis les pavés de saumon 4 minutes côté peau.",
@@ -560,8 +601,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-11", nom:"Soupe de légumes", emoji:"🥣", temps:30, portions:4, tags:["Végétarien","Économique","Familial"],
+    id:"base-11", nom:"Soupe de légumes douce", emoji:"🥣", temps:30, portions:4, tags:["Enfants","Végétarien","Économique","Familial"],
     ingredients:["4 Carottes","2 Poireaux","3 Pommes de terre","2 Courgettes","1 Oignon","1 Bouillon cube"],
+    resume:["Couper tous les légumes en morceaux et les faire revenir 3 min.","Couvrir d'eau avec le bouillon cube et cuire 20 min à petits bouillons.","Mixer finement pour une texture veloutée appréciée des enfants."],
     etapes:[
       "Épluche et lave tous les légumes, puis coupe-les en morceaux.",
       "Dans une grande marmite, fais revenir l'oignon et les poireaux 3 minutes avec un filet d'huile d'olive.",
@@ -570,8 +612,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-12", nom:"Boulettes à la sauce tomate", emoji:"🍝", temps:20, portions:4, tags:["Rapide","Familial"],
+    id:"base-12", nom:"Boulettes à la sauce tomate", emoji:"🍝", temps:20, portions:4, tags:["Enfants","Rapide","Familial"],
     ingredients:["400 g de Boulettes de bœuf","400 g de Sauce tomate","1 Oignon","400 g de Pâtes"],
+    resume:["Dorer les boulettes de bœuf et l'oignon 6 min à la poêle.","Verser la sauce tomate et mijoter 10 min pendant que les pâtes cuisent (9 min).","Servir les pâtes nappées de boulettes à la tomate."],
     etapes:[
       "Dans une poêle, fais dorer les boulettes de bœuf avec l'oignon émincé pendant 6 minutes.",
       "Verse la sauce tomate, couvre et laisse mijoter 10 minutes à feu doux.",
@@ -580,8 +623,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-13", nom:"Steak haché et frites", emoji:"🍔", temps:15, portions:4, tags:["Rapide","Familial"],
+    id:"base-13", nom:"Steak haché et frites", emoji:"🍔", temps:15, portions:4, tags:["Enfants","Rapide","Familial"],
     ingredients:["4 Steaks hachés","600 g de Frites surgelées","1 Salade"],
+    resume:["Cuire les frites 15 min au four à 210 °C ou à l'Airfryer.","Poêler les steaks hachés 3 min par face.","Servir avec la salade verte."],
     etapes:[
       "Préchauffe le four à 210 °C (ou l'Airfryer) et fais cuire les frites pendant 15 minutes jusqu'à ce qu'elles soient croustillantes.",
       "Saisis les steaks hachés dans une poêle bien chaude : 2 à 3 minutes par face selon la cuisson souhaitée.",
@@ -589,8 +633,9 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-14", nom:"Poisson pané et riz", emoji:"🐟", temps:15, portions:4, tags:["Rapide","Économique","Familial"],
+    id:"base-14", nom:"Poisson pané et riz", emoji:"🐟", temps:15, portions:4, tags:["Enfants","Rapide","Économique","Familial"],
     ingredients:["8 Poisson pané","300 g de Riz","1 Citron"],
+    resume:["Cuire le riz 11 min à l'eau bouillante.","Dorer les poissons panés 4 min de chaque côté à la poêle.","Servir avec le riz et des quartiers de citron."],
     etapes:[
       "Fais cuire le riz dans un grand volume d'eau bouillante salée pendant 11 minutes.",
       "Dans une poêle avec un filet d'huile, fais dorer les poissons panés 4 minutes de chaque côté à feu moyen.",
@@ -598,13 +643,125 @@ const BASE_PLATS=[
     ]
   },
   {
-    id:"base-15", nom:"Wraps au poulet", emoji:"🌯", temps:15, portions:4, tags:["Rapide","Familial"],
+    id:"base-15", nom:"Wraps au poulet", emoji:"🌯", temps:15, portions:4, tags:["Enfants","Rapide","Familial"],
     ingredients:["4 Galettes de blé (wraps)","400 g de Blancs de poulet","1 Salade","2 Tomates","100 g de Emmental râpé","1 pot de Sauce blanche"],
+    resume:["Dorer les lamelles de poulet 7 min à la poêle.","Couper les tomates et la salade ; tiédir les wraps 20 sec.","Garnir chaque wrap à table avec sauce, poulet, crudités et emmental."],
     etapes:[
       "Coupe les blancs de poulet en lamelles et fais-les dorer 7 minutes à la poêle avec une pincée d'épices.",
       "Lave et coupe les tomates en petits dés et émince quelques feuilles de salade.",
       "Tiédis les wraps 20 secondes à la poêle ou au micro-ondes.",
       "Tartine chaque wrap de sauce blanche, garnis de poulet, tomates, salade et emmental râpé, puis roule-les bien serrés."
+    ]
+  },
+  // --- 10 Nouvelles recettes rapides Jow / HelloFresh / CuisineAZ (Spécial Enfants 4-7 ans & Adultes, 100% sans jambon) ---
+  {
+    id:"base-16", nom:"Quiche sans pâte express au thon & tomate", emoji:"🥧", temps:25, portions:4, tags:["Enfants","Rapide","Économique","Four","Familial"],
+    ingredients:["2 boîtes de Thon en boîte","4 Œufs","20 cl de Crème fraîche","20 cl de Lait demi-écrémé","100 g de Farine","150 g de Emmental râpé","2 Tomates"],
+    resume:["Fouetter les œufs, la farine, la crème et le lait dans un saladier.","Ajouter le thon émietté et l'emmental râpé, verser dans un moule et disposer les rondelles de tomates.","Cuire 20 min au four à 200 °C jusqu'à ce que la quiche soit bien dorée."],
+    etapes:[
+      "Préchauffe le four à 200 °C. Dans un saladier, fouette les œufs avec la farine, la crème fraîche et le lait.",
+      "Égoutte et émiette le thon, puis incorpore-le à la pâte avec l'emmental râpé.",
+      "Verse dans un moule à tarte beurré et dispose par-dessus les tomates coupées en fines rondelles.",
+      "Enfourne 20 minutes jusqu'à ce que la quiche soit bien dorée et fondante."
+    ]
+  },
+  {
+    id:"base-17", nom:"Nuggets de poulet maison & purée", emoji:"🍗", temps:20, portions:4, tags:["Enfants","Rapide","Familial"],
+    ingredients:["500 g de Blancs de poulet","2 Œufs","80 g de Chapelure","800 g de Pommes de terre","30 g de Beurre","15 cl de Lait demi-écrémé"],
+    resume:["Cuire les pommes de terre en dés 15 min et les écraser avec beurre et lait.","Couper le poulet en bouchées, les tremper dans l'œuf battu puis la chapelure.","Dorer les nuggets 4 min par face à la poêle."],
+    etapes:[
+      "Épluche et coupe les pommes de terre en petits morceaux, puis fais-les cuire 15 minutes dans l'eau bouillante salée avant de les écraser avec le beurre et le lait.",
+      "Coupe les blancs de poulet en bouchées de la taille d'un nugget.",
+      "Trempe chaque morceau dans les œufs battus, puis roule-les dans la chapelure.",
+      "Fais dorer les nuggets à la poêle avec un filet d'huile pendant 4 minutes de chaque côté jusqu'à ce qu'ils soient bien croustillants."
+    ]
+  },
+  {
+    id:"base-18", nom:"Quesadillas fondantes bœuf & maïs", emoji:"🌮", temps:15, portions:4, tags:["Enfants","Rapide","Familial"],
+    ingredients:["4 Galettes de blé (wraps)","350 g de Bœuf haché","150 g de Emmental râpé","150 g de Maïs","200 g de Sauce tomate"],
+    resume:["Cuire le bœuf haché 5 min avec la sauce tomate et le maïs égoutté.","Répartir sur la moitié des wraps, couvrir d'emmental et plier en demi-lune.","Dorer 2 min par face à la poêle et couper en triangles."],
+    etapes:[
+      "Fais revenir le bœuf haché 5 minutes à la poêle, puis ajoute la sauce tomate et le maïs égoutté.",
+      "Répartis la préparation sur la moitié de chaque galette de blé et parseme généreusement d'emmental râpé.",
+      "Replie chaque galette en deux pour former une demi-lune.",
+      "Fais dorer les quesadillas 2 minutes de chaque côté dans une poêle sèche jusqu'à ce que le fromage soit fondu, puis coupe en triangles."
+    ]
+  },
+  {
+    id:"base-19", nom:"Saumon laqué au miel & riz basmati", emoji:"🐟", temps:15, portions:4, tags:["Enfants","Rapide","Familial"],
+    ingredients:["4 Pavés de saumon","300 g de Riz basmati","2 c. à s. de Miel","1 Concombre","1 Citron"],
+    resume:["Cuire le riz basmati 10 min et couper le concombre en rondelles.","Poêler les pavés de saumon 3 min par face.","Napper de miel et de quelques gouttes de citron en fin de cuisson."],
+    etapes:[
+      "Fais cuire le riz basmati 10 minutes dans l'eau bouillante salée. Lave et coupe le concombre en bâtonnets ou rondelles.",
+      "Dans une poêle chaude avec un filet d'huile d'olive, fais dorer les pavés de saumon 3 minutes de chaque côté.",
+      "En fin de cuisson, verse le miel et un trait de jus de citron dans la poêle et enrobe les pavés pendant 1 minute.",
+      "Sers le saumon caramélisé sur le riz basmati avec le concombre croquant."
+    ]
+  },
+  {
+    id:"base-20", nom:"Penne crémeuses au poulet & champignons", emoji:"🍝", temps:15, portions:4, tags:["Enfants","Rapide","Familial"],
+    ingredients:["400 g de Penne","400 g de Blancs de poulet","250 g de Champignons de Paris","20 cl de Crème fraîche","60 g de Parmesan"],
+    resume:["Cuire les penne 9 min à l'eau bouillante salée.","Dorer les petits dés de poulet et les champignons émincés 7 min à la poêle.","Verser la crème fraîche et le parmesan, puis mélanger avec les pâtes."],
+    etapes:[
+      "Fais cuire les penne 9 minutes dans un grand volume d'eau bouillante salée.",
+      "Pendant ce temps, coupe les blancs de poulet en petits dés et émince les champignons de Paris.",
+      "Fais dorer le poulet et les champignons 7 minutes dans une poêle chaude avec un filet d'huile.",
+      "Baisse le feu, ajoute la crème fraîche, le parmesan et les penne égouttées, puis mélange 1 minute."
+    ]
+  },
+  {
+    id:"base-21", nom:"Œufs cocotte façon Pizza & mouillettes", emoji:"🍳", temps:12, portions:4, tags:["Enfants","Rapide","Végétarien","Économique","Familial"],
+    ingredients:["8 Œufs","300 g de Sauce tomate","20 cl de Crème fraîche","2 Mozzarella","1 Baguette"],
+    resume:["Verser la sauce tomate et la crème dans une grande poêle (ou 4 ramequins).","Casser les œufs par-dessus et répartir la mozzarella coupée en dés.","Cuire 6 min à couvert à feu doux et servir avec des mouillettes de baguette."],
+    etapes:[
+      "Dans une grande poêle à bords hauts, fais chauffer la sauce tomate avec la crème fraîche pendant 2 minutes.",
+      "Creuse 8 petits nids dans la sauce et casse délicatement les œufs dedans.",
+      "Répartis la mozzarella coupée en petits dés tout autour, couvre et laisse cuire 5 à 6 minutes à feu doux jusqu'à ce que le blanc soit pris.",
+      "Coupe la baguette en mouillettes pour tremper directement dans les œufs à la tomate et au fromage fondant."
+    ]
+  },
+  {
+    id:"base-22", nom:"Gratin de coquillettes poulet & mozzarella", emoji:"🥘", temps:20, portions:4, tags:["Enfants","Rapide","Four","Familial"],
+    ingredients:["400 g de Coquillettes","4 Escalopes de poulet","20 cl de Crème fraîche","2 Mozzarella","100 g de Emmental râpé"],
+    resume:["Cuire les coquillettes 8 min et dorer les dés de poulet 5 min à la poêle.","Mélanger dans un plat à gratin avec la crème fraîche et la mozzarella en dés.","Couvrir d'emmental râpé et gratiner 7 min sous le gril du four."],
+    etapes:[
+      "Fais cuire les coquillettes 8 minutes dans l'eau bouillante salée. Allume le gril du four à 210 °C.",
+      "Coupe les escalopes de poulet en petits dés et fais-les dorer 5 minutes à la poêle.",
+      "Dans un plat à gratin, mélange les coquillettes égouttées, le poulet, la crème fraîche et la mozzarella coupée en dés.",
+      "Recouvre d'emmental râpé et passe 7 minutes au four pour faire fondre et gratiner."
+    ]
+  },
+  {
+    id:"base-23", nom:"Quesadillas chèvre-miel & tomates cerises", emoji:"🌯", temps:10, portions:4, tags:["Enfants","Rapide","Végétarien","Économique"],
+    ingredients:["4 Galettes de blé (wraps)","1 Chèvre","2 c. à s. de Miel","100 g de Emmental râpé","1 Salade","250 g de Tomates cerises"],
+    resume:["Répartir des rondelles de chèvre, l'emmental et un filet de miel sur la moitié des wraps.","Plier en deux et dorer 2 min par face à la poêle jusqu'à ce que le fromage fonde.","Couper en triangles et servir avec la salade et les tomates cerises."],
+    etapes:[
+      "Coupe la bûche de chèvre en fines rondelles et répartis-les sur la moitié de chaque galette de blé.",
+      "Parseme d'emmental râpé, ajoute un léger filet de miel et replie chaque galette en deux.",
+      "Fais dorer 2 minutes de chaque côté dans une grande poêle chaude sans matière grasse jusqu'à ce que ce soit croustillant et fondant.",
+      "Coupe en triangles faciles à tenir pour les enfants et sers avec la salade et les tomates cerises."
+    ]
+  },
+  {
+    id:"base-24", nom:"Penne aux courgettes fondantes & mozzarella", emoji:"🍝", temps:15, portions:4, tags:["Enfants","Rapide","Végétarien","Familial"],
+    ingredients:["400 g de Penne","2 Courgettes","250 g de Tomates cerises","2 Mozzarella","60 g de Parmesan"],
+    resume:["Cuire les penne 9 min.","Sauter les courgettes coupées en petits dés 7 min à l'huile d'olive avec les tomates cerises coupées en deux.","Mélanger avec les pâtes chaudes, la mozzarella en dés et le parmesan."],
+    etapes:[
+      "Lance la cuisson des penne pendant 9 minutes dans l'eau bouillante salée.",
+      "Lave et coupe les courgettes en tout petits dés et les tomates cerises en deux.",
+      "Fais sauter les courgettes 6 minutes à la poêle avec un filet d'huile d'olive, puis ajoute les tomates cerises 2 minutes.",
+      "Mélange les pâtes égouttées avec les légumes, le parmesan et la mozzarella coupée en petits dés qui va fondre."
+    ]
+  },
+  {
+    id:"base-25", nom:"Œufs à la coque, mouillettes & crudités", emoji:"🥚", temps:10, portions:4, tags:["Enfants","Rapide","Végétarien","Économique"],
+    ingredients:["8 Œufs","8 tranches de Pain de mie","40 g de Beurre","2 Carottes","1 Concombre","150 g de Comté"],
+    resume:["Plonger les œufs 3 min exactement dans l'eau bouillante.","Griller et beurrer le pain de mie, puis couper en mouillettes avec des bâtonnets de comté.","Servir avec carottes et concombre en bâtonnets à croquer."],
+    etapes:[
+      "Porte une casserole d'eau à ébullition et plonge délicatement les œufs pendant 3 minutes chrono.",
+      "Pendant ce temps, fais griller le pain de mie, beurre-le et coupe-le en mouillettes.",
+      "Coupe également le comté, les carottes épluchées et le concombre en bâtonnets.",
+      "Sers les œufs à la coque dans leurs coquetiers avec les mouillettes et les bâtonnets à croquer."
     ]
   }
 ];
@@ -627,25 +784,31 @@ function guessEmoji(nom){
   return "🍽️";
 }
 
-// Enrichit automatiquement un plat existant avec les métadonnées Marmiton/Jow s'il n'en a pas encore
+// Enrichit automatiquement un plat existant avec les métadonnées Marmiton/Jow/CuisineAZ/HelloFresh
 function enrichPlat(p){
   const b=BASE_PLATS_BY_ID[p.id]||BASE_PLATS_BY_KEY[keyOf(p.nom)];
+  if(b&&/jambon|lardon|croque-monsieur/i.test(p.nom+" "+(p.ingredients||[]).join(" "))) return {...b};
   const hasQty=Array.isArray(p.ingredients)&&p.ingredients.some(x=>/\d/.test(x));
+  const etapes=Array.isArray(p.etapes)&&p.etapes.length?p.etapes:(b?.etapes||[]);
+  const resume=Array.isArray(p.resume)&&p.resume.length?p.resume:(b?.resume||etapes.slice(0,3));
+  const mergedTags=new Set([...(Array.isArray(p.tags)?p.tags:[]),...(b?.tags||[])]);
   return {
     ...p,
     emoji:p.emoji||b?.emoji||guessEmoji(p.nom),
     temps:p.temps||b?.temps||null,
     portions:p.portions||b?.portions||4,
-    tags:Array.isArray(p.tags)&&p.tags.length?p.tags:(b?.tags||[]),
+    tags:[...mergedTags],
     ingredients:(Array.isArray(p.ingredients)&&p.ingredients.length&&(hasQty||!b))?p.ingredients:(b?.ingredients||p.ingredients||[]),
-    etapes:Array.isArray(p.etapes)&&p.etapes.length?p.etapes:(b?.etapes||[])
+    resume,
+    etapes
   };
 }
 
 let items=[], produits={}, plats=[], menus={}, extraStores=[], seeding=false;
 let store=ls.get("courses.magasin","Leclerc"), tab="liste", week=weekStart(new Date());
 let sortByRayon=ls.get("courses.tri","rayon")==="rayon";
-let activeTag="", platQuery="";
+let collapsedRayons=new Set((ls.get("courses.rayons.fermes","")||"").split(",").filter(Boolean));
+let activeTag="", platQuery="", recTag="", recQuery="", recShortMode=true;
 const allStores=()=>[...BASE_STORES,...extraStores.filter(s=>!BASE_STORES.includes(s))];
 const priceOf=(key,s)=>{
   const saved=produits[key]?.prix?.[s];
@@ -692,7 +855,7 @@ $("sheet").addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.matches(
 // --- Onglets ---
 function setTab(t){tab=t;
   $("tabbar").querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.p===t));
-  ["liste","menus","plats"].forEach(p=>$("p-"+p).hidden=p!==t); render(); window.scrollTo(0,0)}
+  ["liste","menus","plats","recettes"].forEach(p=>$("p-"+p).hidden=p!==t); render(); window.scrollTo(0,0)}
 $("tabbar").onclick=e=>{const b=e.target.closest(".tab");if(b)setTab(b.dataset.p)};
 
 // --- Magasins ---
@@ -771,11 +934,19 @@ function renderOften(){
 }
 $("often").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const r=addItem(b.dataset.n,{qty:1});if(r)toast(`${r.nom} ajouté`)};
 
-// --- Liste & Tri par Rayons (façon Jow) ---
+// --- Liste & Tri par Rayons pliables (façon Jow) ---
+function saveCollapsed(){ ls.set("courses.rayons.fermes",[...collapsedRayons].join(",")); }
 $("sortBtn").onclick=()=>{
   sortByRayon=!sortByRayon;
   ls.set("courses.tri",sortByRayon?"rayon":"ajout");
   renderList();
+};
+$("collapseAllBtn").onclick=()=>{
+  const activeRayons=new Set(items.filter(i=>!i.coche).map(i=>rayonOf(i.key)));
+  const allClosed=[...activeRayons].every(rid=>collapsedRayons.has(rid));
+  if(allClosed) collapsedRayons.clear();
+  else activeRayons.forEach(rid=>collapsedRayons.add(rid));
+  saveCollapsed(); renderList();
 };
 function rowHtml(i){
   const p=priceOf(i.key,store), q=Q(i);
@@ -802,6 +973,7 @@ function renderList(){
   $("sortBtn").hidden=todo.length<2;
 
   if(!todo.length){
+    $("collapseAllBtn").hidden=true;
     $("todoWrap").innerHTML=`<div class="group"><p class="empty">${cart.length?"Tout est dans le panier 🎉":"Ta liste est vide. Tape un article ci-dessus, ou prépare la semaine depuis l'onglet Menus."}</p></div>`;
   } else if(sortByRayon){
     const byR=new Map();
@@ -810,17 +982,24 @@ function renderList(){
       const rid=rayonOf(i.key);
       (byR.get(rid)||byR.get("au")).push(i);
     });
+    const activeR=RAYONS.filter(r=>(byR.get(r.id)||[]).length>0);
+    const allClosed=activeR.length>0&&activeR.every(r=>collapsedRayons.has(r.id));
+    $("collapseAllBtn").hidden=activeR.length<2;
+    $("collapseAllBtn").textContent=allClosed?"Tout déplier":"Tout réduire";
     const sections=[];
-    RAYONS.forEach(r=>{
-      const arr=byR.get(r.id)||[];
-      if(!arr.length) return;
-      sections.push(`<div class="aisle">
-        <div class="aisle-hd"><span>${r.ico} ${esc(r.nom)}</span><small>${plural(n(arr),"article")}</small></div>
-        <div class="group">${arr.map(rowHtml).join("")}</div>
+    activeR.forEach(r=>{
+      const arr=byR.get(r.id)||[], closed=collapsedRayons.has(r.id);
+      sections.push(`<div class="aisle${closed?" closed":""}">
+        <button type="button" class="aisle-hd" data-toggle-r="${r.id}" aria-expanded="${!closed}">
+          <span>${r.ico} ${esc(r.nom)}</span>
+          <small>${plural(n(arr),"article")} <span class="aisle-chev">▾</span></small>
+        </button>
+        <div class="group" ${closed?"hidden":""}>${arr.map(rowHtml).join("")}</div>
       </div>`);
     });
     $("todoWrap").innerHTML=`<div class="aisles">${sections.join("")}</div>`;
   } else {
+    $("collapseAllBtn").hidden=true;
     $("todoWrap").innerHTML=`<div class="group">${todo.map(rowHtml).join("")}</div>`;
   }
 
@@ -860,6 +1039,12 @@ function removeItem(id){
 }
 const onListClick=e=>{
   if(Date.now()-lastSwipe<400) return;
+  const tr=e.target.closest("[data-toggle-r]");
+  if(tr){
+    const rid=tr.dataset.toggleR;
+    if(collapsedRayons.has(rid)) collapsedRayons.delete(rid); else collapsedRayons.add(rid);
+    saveCollapsed(); renderList(); return;
+  }
   const a=e.target.closest("[data-act]"); const row=e.target.closest(".row"); if(!row) return;
   if(row.classList.contains("open")&&a?.dataset.act!=="del"){closeRows();return}
   if(!a) return; const i=items.find(x=>x.id===row.dataset.id); if(!i) return;
@@ -1158,8 +1343,13 @@ function openFichePlat(p,initPers){
       <div class="ing-list" id="rIngs"></div>
     </div>
 
+    ${(p.resume&&p.resume.length)?`<div class="sec">
+      <div class="sh" style="padding:0 4px"><span>⚡ En bref (en 3 lignes)</span></div>
+      <div class="rcard-short" style="background:var(--surface)">${p.resume.map((ln,idx)=>`<div><b>${idx+1}.</b><span>${esc(ln)}</span></div>`).join("")}</div>
+    </div>`:""}
+
     <div class="sec">
-      <div class="sh" style="padding:0 4px"><span>Préparation</span></div>
+      <div class="sh" style="padding:0 4px"><span>📖 Préparation détaillée</span></div>
       ${(p.etapes&&p.etapes.length)?`<div class="steps-box">${p.etapes.map((st,idx)=>`<div class="step-item"><span class="step-num">${idx+1}</span><span>${esc(st)}</span></div>`).join("")}</div>`
         :`<p class="empty" style="background:var(--surface);border-radius:12px">Aucune étape rédigée pour ce plat. Touche « Modifier » pour ajouter la recette.</p>`}
     </div>
@@ -1308,7 +1498,77 @@ function openEditPlat(p){
     fs.collection("plats").doc(p.id).delete().catch(fail("Suppression")); closeSheet(); toast(`${p.nom} supprimé`)}}
 }
 
-// Ajoute ou enrichit une seule fois les 15 plats de base + les 118 prix E.Leclerc et Lidl dans Firestore
+// --- Onglet Recettes (Vue rapide en 3 lignes ou Vue détaillée) ---
+$("recModeBtn").onclick=()=>{
+  recShortMode=!recShortMode;
+  $("recModeBtn").textContent=recShortMode?"Vue : En 3 lignes ⚡":"Vue : Détaillée 📖";
+  renderRecettes();
+};
+$("recTags").onclick=e=>{
+  const b=e.target.closest("[data-t]"); if(!b) return;
+  recTag=b.dataset.t; renderRecettes();
+};
+$("recSearch").addEventListener("input",e=>{ recQuery=e.target.value; renderRecettes(); });
+
+function renderRecettes(){
+  $("recTags").innerHTML=`<button type="button" class="pill sm" data-t="" aria-pressed="${!recTag}">Tous</button>`
+    +ALL_TAGS.map(t=>`<button type="button" class="pill sm" data-t="${t.id}" aria-pressed="${recTag===t.id}">${t.lbl}</button>`).join("");
+  const q=keyOf(recQuery);
+  const list=plats.slice().filter(p=>{
+    if(recTag&&!(p.tags||[]).includes(recTag)) return false;
+    if(q&&q!=="article"){
+      const inNom=keyOf(p.nom).includes(q);
+      const inIng=(p.ingredients||[]).some(i=>keyOf(i).includes(q));
+      if(!inNom&&!inIng) return false;
+    }
+    return true;
+  }).sort((a,b)=>(a.temps||99)-(b.temps||99)||a.nom.localeCompare(b.nom,"fr"));
+
+  if(!list.length){
+    $("recList").innerHTML=`<div class="group"><p class="empty">Aucune recette ne correspond à ce filtre.</p></div>`;
+    return;
+  }
+  $("recList").innerHTML=list.map(p=>{
+    const cLidl=platCost(p,"Lidl"), cLec=platCost(p,"Leclerc");
+    const lines=recShortMode?(p.resume?.length?p.resume:(p.etapes||[]).slice(0,3)):(p.etapes||[]);
+    const ings=(p.ingredients||[]).map(raw=>{const x=parseEntry(raw);return x.detail?`${x.nom} (${x.detail})`:x.qty>1?`${x.qty} ${x.nom}`:x.nom}).join(" · ");
+    return `<article class="rcard" data-id="${p.id}">
+      <div class="rcard-top" data-act="fiche">
+        <div style="min-width:0;flex:1">
+          <div class="rcard-title"><span>${p.emoji||"🍽️"}</span><span>${esc(p.nom)}</span></div>
+          <div class="pl-meta" style="margin-top:5px">
+            ${p.temps?`<span class="tag-badge${p.temps<=20?" fast":""}">⏱ ${p.temps} min</span>`:""}
+            ${cLidl?`<span class="tag-badge">Lidl ≈ ${fmt(cLidl)}</span>`:""}
+            ${cLec?`<span class="tag-badge">Leclerc ≈ ${fmt(cLec)}</span>`:""}
+            ${(p.tags||[]).map(t=>`<span class="tag-badge">${t==="Enfants"?"👶 4-7 ans":esc(t)}</span>`).join("")}
+          </div>
+        </div>
+      </div>
+      <div class="rcard-ings"><b>Ingrédients (${p.portions||4} pers.) :</b> ${esc(ings)}</div>
+      ${lines.length?`<div class="rcard-short">${lines.map((ln,idx)=>`<div><b>${idx+1}.</b><span>${esc(ln)}</span></div>`).join("")}</div>`:""}
+      <div class="rcard-acts">
+        <button type="button" class="rcard-btn pri" data-act="cook">👨‍🍳 Pas à pas</button>
+        <button type="button" class="rcard-btn" data-act="add">+ Courses</button>
+        <button type="button" class="rcard-btn" data-act="fiche">🍽️ Portions / Détails</button>
+      </div>
+    </article>`;
+  }).join("");
+}
+$("recList").onclick=e=>{
+  const card=e.target.closest(".rcard"); if(!card) return;
+  const p=plats.find(x=>x.id===card.dataset.id); if(!p) return;
+  const act=e.target.closest("[data-act]")?.dataset.act;
+  if(act==="cook") openCookMode(p,p.portions||4);
+  else if(act==="add"){
+    (p.ingredients||[]).forEach(raw=>{
+      const parsed=parseEntry(raw);
+      addItem(parsed.nom,{qty:parsed.unit?1:parsed.qty,detail:parsed.detail||null,pour:p.nom});
+    });
+    toast(`Ingrédients pour ${p.nom} ajoutés à la liste`);
+  } else if(act==="fiche") openFichePlat(p);
+};
+
+// Ajoute ou enrichit une seule fois les 25 plats de base + les 118 prix E.Leclerc et Lidl dans Firestore
 function seedBasePlats(){
   if(seeding) return; seeding=true;
   const b=fs.batch(), today=localDate(new Date());
@@ -1324,13 +1584,13 @@ function seedBasePlats(){
       b.set(fs.collection("produits").doc(k),{nom:produits[k]?.nom||nom,prix},{merge:true});
     }
   });
-  b.set(fs.collection("reglages").doc("courses"),{basePlats:true,basePlatsV2:true,leclercPricesV1:true,lidlPricesV1:true},{merge:true});
+  b.set(fs.collection("reglages").doc("courses"),{basePlats:true,basePlatsV2:true,leclercPricesV1:true,lidlPricesV1:true,kidsRecipesV1:true,noHamJowV1:true},{merge:true});
   b.commit().catch(()=>{seeding=false});
 }
 
 function render(){
   renderStores(); renderOften();
-  if(tab==="liste") renderList(); else if(tab==="menus") renderMenus(); else renderPlats();
+  if(tab==="liste") renderList(); else if(tab==="menus") renderMenus(); else if(tab==="plats") renderPlats(); else renderRecettes();
 }
 
 // --- Données en direct ---
@@ -1351,13 +1611,13 @@ function start(){
   const map=s=>s.docs.map(d=>({id:d.id,...d.data()}));
   unsub.push(fs.collection("courses").onSnapshot(s=>{items=map(s);render();done()},err));
   unsub.push(fs.collection("produits").onSnapshot(s=>{produits=Object.fromEntries(s.docs.map(d=>[d.id,d.data()]));render();done()},err));
-  unsub.push(fs.collection("plats").onSnapshot(s=>{plats=map(s).map(enrichPlat);render();done()},err));
+  unsub.push(fs.collection("plats").onSnapshot(s=>{plats=map(s).map(enrichPlat).filter(p=>!/jambon|lardon/i.test(p.nom+" "+(p.ingredients||[]).join(" ")));render();done()},err));
   unsub.push(fs.collection("menus").onSnapshot(s=>{menus=Object.fromEntries(s.docs.map(d=>[d.id,d.data()]));render();done()},err));
   unsub.push(fs.collection("reglages").doc("courses").onSnapshot(d=>{
     const x=d.exists?d.data():{}; extraStores=x.magasins||[]; render()},()=>{}));
-  // Plats de base enrichis (v2) + Prix E.Leclerc & Lidl : on vérifie en ligne s'ils ont déjà été ajoutés
+  // Plats de base enrichis (v2) + Recettes Jow sans jambon + Prix E.Leclerc & Lidl : on vérifie en ligne s'ils ont déjà été ajoutés
   fs.collection("reglages").doc("courses").get({source:"server"})
-    .then(d=>{ if(!(d.exists&&d.data().basePlatsV2&&d.data().leclercPricesV1&&d.data().lidlPricesV1)) seedBasePlats(); })
+    .then(d=>{ if(!(d.exists&&d.data().basePlatsV2&&d.data().leclercPricesV1&&d.data().lidlPricesV1&&d.data().kidsRecipesV1&&d.data().noHamJowV1)) seedBasePlats(); })
     .catch(()=>{});
 }
 </script>
