@@ -14,13 +14,12 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <style>
-/* Style Mealio : Vert forêt profond, vert tendre/citron vert, cartes blanches arrondies, mascotte chef & barre d'onglets flottante */
+/* Style Mealio : vert forêt, vert citron, cartes blanches arrondies, barre d'onglets flottante */
 :root{
   --bg:#f1f6f1; --surface:#ffffff; --fill:#e6efe7; --sep:rgba(30,85,48,.11); --ring:#bdd2c1;
   --fg:#132a1b; --muted:#5e7665;
   --accent:#1f6336; --accent-fg:#ffffff; --accent-soft:#e2f3e6;
   --lime:#a8e86c; --lime-fg:#133b20;
-  --hero-1:#134224; --hero-2:#1f6437; --hero-3:#2e854a;
   --pos:#23863e; --pos-soft:#dff5e4; --del:#e03e2f; --today:#1f6336;
   --bar:rgba(255,255,255,.94);
   --shadow:0 8px 24px rgba(18,58,31,.07);
@@ -32,7 +31,6 @@
   --fg:#f2f9f3; --muted:#93b09b;
   --accent:#4cc36b; --accent-fg:#092110; --accent-soft:#193b25;
   --lime:#a8e86c; --lime-fg:#10331b;
-  --hero-1:#0d2e19; --hero-2:#174c2a; --hero-3:#21683a;
   --pos:#4cd964; --pos-soft:#14351e; --del:#ff5b4d; --today:#a8e86c;
   --bar:rgba(17,36,24,.94);
   --shadow:0 10px 28px rgba(0,0,0,.35);
@@ -47,62 +45,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-vi
 .wrap{max-width:580px;margin:0 auto;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:calc(env(safe-area-inset-top,0px) + 10px) calc(114px + env(safe-area-inset-bottom,0px))}
 .page{display:flex;flex-direction:column;gap:18px}
 
-/* === BANNIÈRE HERO MEALIO === */
-.mealio-hero{position:relative;overflow:hidden;border-radius:26px;background:radial-gradient(circle at 78% 42%,rgba(168,232,108,.32) 0%,transparent 52%),linear-gradient(140deg,var(--hero-1) 0%,var(--hero-2) 55%,var(--hero-3) 100%);color:#fff;padding:16px 18px 18px;box-shadow:0 14px 34px rgba(17,64,34,.24);margin-bottom:18px}
-.mealio-wm{position:absolute;left:50%;top:32px;transform:translateX(-50%);font-size:clamp(54px,16vw,88px);font-weight:900;letter-spacing:.06em;color:rgba(195,247,154,.13);pointer-events:none;user-select:none;white-space:nowrap;line-height:1}
-.hero-top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.brand{display:inline-flex;align-items:center;gap:7px;font-size:23px;font-weight:800;letter-spacing:-.02em;color:#fff}
-.brand-leaf{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;background:rgba(168,232,108,.22);font-size:17px}
-.brand b{color:var(--lime)}
-.hero-actions{display:flex;align-items:center;gap:8px}
-.hero-chip{border:0;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
-.hero-icon-btn{width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;display:grid;place-items:center;font-size:15px}
-.hero-body{position:relative;z-index:2;display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:8px}
-.hero-badge{display:inline-flex;align-items:center;gap:5px;background:var(--lime);color:var(--lime-fg);font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;margin-bottom:8px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
-.hero-title{font-size:clamp(22px,5.6vw,30px);font-weight:800;line-height:1.08;margin:0 0 6px;letter-spacing:-.02em}
-.hero-title span{display:block;color:var(--lime)}
-.hero-sub{font-size:12.5px;color:rgba(255,255,255,.84);margin:0 0 12px;line-height:1.35}
-.hero-cta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.hero-cta{border:1px solid rgba(168,232,108,.45);background:#0f331c;color:#fff;border-radius:999px;padding:6px 6px 6px 14px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:8px;box-shadow:0 6px 16px rgba(0,0,0,.2)}
-.hero-cta i{width:26px;height:26px;border-radius:50%;background:#399b53;color:#fff;display: inline-grid;place-items:center;font-style:normal;font-size:14px}
-.hero-art{position:relative;display:flex;justify-content:center;align-items:center;min-height:148px}
-.hero-art svg{width:100%;max-width:168px;height:auto;filter:drop-shadow(0 10px 18px rgba(0,0,0,.28))}
-.hero-stats{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px;padding-top:11px;border-top:1px solid rgba(255,255,255,.14)}
-.hstat{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.88);line-height:1.2}
-.hstat-ico{width:24px;height:24px;border-radius:7px;background:rgba(168,232,108,.2);display:grid;place-items:center;font-size:13px;flex:none}
-.hstat b{display:block;font-size:12px;color:#fff}
-
-/* === BARRE CALENDRIER 7 JOURS & CARTE "REPAS DU JOUR" (STYLE MOBILE MEALIO) === */
-.week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.day-pill{border:1px solid var(--sep);background:var(--surface);border-radius:16px;padding:9px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:var(--shadow);transition:transform .15s ease,background .15s ease}
-.day-pill span{font-size:11px;font-weight:600;color:var(--muted);text-transform:capitalize}
-.day-pill b{font-size:16px;font-weight:800;color:var(--fg);font-variant-numeric:tabular-nums}
-.day-pill.has-meal::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--pos)}
-.day-pill[aria-selected="true"]{background:linear-gradient(145deg,#25733f,#174e29);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 8px 18px rgba(25,88,46,.3)}
-.day-pill[aria-selected="true"] span,.day-pill[aria-selected="true"] b{color:#fff}
-.day-pill[aria-selected="true"].has-meal::after{background:var(--lime)}
-
-.today-card{background:var(--surface);border-radius:22px;padding:14px;box-shadow:var(--shadow);border:1px solid var(--sep);display:flex;flex-direction:column;gap:12px}
-.today-banner{position:relative;border-radius:16px;background:linear-gradient(135deg,#e3f4e6 0%,#cdecd3 55%,#eef8e8 100%);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;overflow:hidden}
-@media (prefers-color-scheme:dark){.today-banner{background:linear-gradient(135deg,#183824 0%,#204a30 100%)}}
-.today-plate{width:64px;height:64px;border-radius:50%;background:var(--surface);box-shadow:0 6px 16px rgba(19,62,33,.15);display:grid;place-items:center;font-size:36px;flex:none;border:3px solid rgba(168,232,108,.6)}
-.today-info{min-width:0;flex:1}
-.today-kicker{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);margin-bottom:2px}
-.today-title{font-size:18px;font-weight:800;margin:0;line-height:1.2;color:var(--fg)}
-.today-meta{font-size:13px;color:var(--muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.today-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.view-rec-btn{border:1px solid var(--sep);background:var(--fill);color:var(--fg);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
-.view-rec-btn.pri{background:var(--accent);color:#fff;border-color:transparent}
-
-/* 4 Cartes catégories carrées façon Mealio (Breakfast / Lunch / Dinner / Snacks) */
-.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.cat-card{border:1px solid var(--sep);background:var(--surface);border-radius:18px;padding:11px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:var(--shadow);text-align:center}
-.cat-card[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.cat-ico{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;font-size:21px}
-.cat-card span{font-size:12px;font-weight:700;color:var(--fg);line-height:1.15}
-
 /* grand titre */
 .lt{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:2px}
+.lt h1 b{color:var(--pos)}
 .lt h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.15}
 .lt .act{background:var(--accent-soft);border:0;color:var(--accent);font-size:14px;font-weight:700;padding:7px 13px;border-radius:999px}
 .status{color:var(--muted);font-size:14px;margin:-8px 0 0}
@@ -117,10 +62,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-vi
 /* rayons (façon Jow) - pliables */
 .aisles{display:flex;flex-direction:column;gap:11px}
 .aisle{display:flex;flex-direction:column;gap:6px}
-.aisle-hd{width:100%;border:1px solid var(--sep);background:var(--surface);border-radius:14px;display:flex;justify-content:space-between;align-items:center;padding:11px 14px;font-size:15px;font-weight:700;color:var(--fg);text-align:left;box-shadow:var(--shadow)}
+.aisle-hd{display:flex;justify-content:space-between;align-items:center;padding:0 8px;font-size:15px;font-weight:700;color:var(--fg)}
 .aisle-hd small{font-weight:600;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;display:inline-flex;align-items:center;gap:6px}
-.aisle-chev{display:inline-block;transition:transform .18s ease;font-size:14px;color:var(--accent)}
-.aisle.closed .aisle-chev{transform:rotate(-90deg)}
 /* magasins & filtres */
 .stores{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -14px;padding:2px 14px}
 .stores::-webkit-scrollbar{display:none}
@@ -230,31 +173,12 @@ textarea.field{resize:vertical;line-height:1.45}
 .cook-step-txt{font-size:20px;line-height:1.45;font-weight:600;margin:6px 0}
 .timer-pill{align-self:flex-start;border:0;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:9px 16px;font-size:14.5px;font-weight:700;display:inline-flex;align-items:center;gap:8px}
 .timer-pill.run{background:var(--pos-soft);color:var(--pos)}
-/* cartes recettes express façon Mealio */
-.rec-cards{display:flex;flex-direction:column;gap:14px}
-.rcard{background:var(--surface);border-radius:20px;padding:15px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);border:1px solid var(--sep)}
-.rcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;cursor:pointer}
-.rcard-title{font-weight:800;font-size:17.5px;display:flex;align-items:center;gap:10px}
-.rcard-emo{width:42px;height:42px;border-radius:13px;background:var(--accent-soft);display:grid;place-items:center;font-size:23px;flex:none}
-.rcard-ings{font-size:13.5px;color:var(--muted);line-height:1.4}
-.rcard-ings b{color:var(--fg);font-weight:700}
-.rcard-short{background:var(--fill);border-radius:14px;padding:11px 13px;font-size:14.5px;line-height:1.45;display:flex;flex-direction:column;gap:5px}
-.rcard-short div{display:flex;gap:8px;align-items:baseline}
-.rcard-short b{color:var(--accent);font-size:13px;flex:none;font-weight:800}
-.rcard-acts{display:flex;gap:8px;flex-wrap:wrap;padding-top:2px}
-.rcard-btn{border:1px solid var(--sep);background:var(--surface);color:var(--fg);border-radius:999px;padding:8px 13px;font-size:13.5px;font-weight:700}
-.rcard-btn.pri{background:var(--accent);color:#fff;border-color:transparent}
-
-/* === BARRE D'ONGLETS DU BAS FAÇON MEALIO AVEC BOUTON + CENTRAL FLOTTANT === */
-.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:540px;z-index:20;background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--sep);border-radius:26px;box-shadow:0 12px 32px rgba(15,52,28,.16);display:grid;grid-template-columns:1fr 1fr 64px 1fr 1fr;align-items:center;padding:6px 8px}
+/* === BARRE D'ONGLETS DU BAS === */
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:540px;z-index:20;background:var(--bar);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid var(--sep);border-radius:26px;box-shadow:0 12px 32px rgba(15,52,28,.16);display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;padding:6px 8px}
 .tab{position:relative;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;font-size:11px;font-weight:700;color:var(--muted)}
 .tab svg{width:24px;height:24px}
 .tab[aria-selected="true"]{color:var(--accent)}
 .tab-badge{position:absolute;top:1px;left:calc(50% + 5px);background:var(--accent);color:var(--accent-fg);font-size:10px;font-weight:800;border-radius:999px;padding:1px 5px;min-width:16px;text-align:center;font-variant-numeric:tabular-nums}
-.fab-wrap{display:flex;justify-content:center;align-items:center}
-.fab-add{width:52px;height:52px;border-radius:50%;border:4px solid var(--surface);background:linear-gradient(145deg,#52c26d,#1f6336);color:#fff;font-size:28px;font-weight:500;line-height:1;display:grid;place-items:center;margin-top:-24px;box-shadow:0 8px 20px rgba(31,99,54,.38);transition:transform .15s ease}
-.fab-add:active{transform:scale(.93)}
-
 /* fenêtre du bas */
 .overlay{position:fixed;inset:0;background:rgb(8 24 13 / .52);z-index:30;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
 .sheet{background:var(--bg);width:100%;max-width:580px;border-radius:24px 24px 0 0;padding-top:8px;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px;max-height:92vh;overflow:auto}
@@ -301,56 +225,7 @@ details.others summary::-webkit-details-marker{display:none}
 
 <div class="wrap" id="loginView" hidden>
   <div class="login">
-    <div class="mealio-hero" style="margin-bottom:0">
-      <div class="mealio-wm">MEALIO</div>
-      <div class="hero-top">
-        <span class="brand"><span class="brand-leaf">🌿</span>meal<b>io</b></span>
-      </div>
-      <div class="hero-body">
-        <div>
-          <span class="hero-badge">🌱 Habitudes saines, foyer heureux</span>
-          <h1 class="hero-title">Planifiez vos repas.<span>Savourez chaque bouchée.</span></h1>
-          <p class="hero-sub">Menus de la semaine, recettes rapides enfants & adultes et comparateur Lidl / E.Leclerc.</p>
-        </div>
-        <div class="hero-art" aria-hidden="true">
-          <svg viewBox="0 0 200 200" fill="none">
-            <circle cx="105" cy="108" r="68" fill="#A8E86C" fill-opacity="0.22"/>
-            <!-- Toque de chef -->
-            <ellipse cx="105" cy="52" rx="44" ry="26" fill="#FFFFFF"/>
-            <circle cx="76" cy="48" r="22" fill="#F4F9F4"/>
-            <circle cx="105" cy="38" r="26" fill="#FFFFFF"/>
-            <circle cx="134" cy="48" r="22" fill="#F4F9F4"/>
-            <rect x="73" y="62" width="64" height="18" rx="6" fill="#E8F2E9"/>
-            <path d="M105 65C105 65 112 58 116 63C120 68 111 75 105 75C99 75 90 68 94 63C98 58 105 65 105 65Z" fill="#2E854A"/>
-            <!-- Cuillère en bois -->
-            <rect x="36" y="72" width="7" height="58" rx="3.5" transform="rotate(-18 36 72)" fill="#C67D3B"/>
-            <ellipse cx="33" cy="65" rx="12" ry="16" transform="rotate(-18 33 65)" fill="#DA924E"/>
-            <!-- Visage mignon -->
-            <rect x="74" y="76" width="62" height="54" rx="26" fill="#FFD7BA"/>
-            <path d="M72 88C72 74 88 68 105 68C122 68 138 74 138 88C130 80 118 78 105 78C92 78 80 80 72 88Z" fill="#4A2C1D"/>
-            <circle cx="91" cy="99" r="6.5" fill="#3B2216"/>
-            <circle cx="89" cy="97" r="2.2" fill="#FFFFFF"/>
-            <path d="M113 99C116 94 123 94 126 99" stroke="#3B2216" stroke-width="3.5" stroke-linecap="round"/>
-            <circle cx="82" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
-            <circle cx="128" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
-            <path d="M96 111C96 111 100 119 106 119C112 119 116 111 116 111Z" fill="#D94B43"/>
-            <!-- Tablier & bol -->
-            <path d="M76 130H134L140 176H70L76 130Z" fill="#2A7A43"/>
-            <path d="M84 130H126L130 176H80L84 130Z" fill="#F5FAF5"/>
-            <!-- Bol de légumes frais -->
-            <path d="M106 146H166C166 165 152 178 136 178C120 178 106 165 106 146Z" fill="#FFFFFF"/>
-            <circle cx="124" cy="142" r="9" fill="#63C14B"/>
-            <circle cx="138" cy="139" r="10" fill="#F39C3D"/>
-            <circle cx="151" cy="143" r="8" fill="#E64833"/>
-            <!-- Légumes flottants -->
-            <circle cx="168" cy="92" r="11" fill="#E64833"/>
-            <path d="M165 80L168 84L172 80" stroke="#72D152" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="48" cy="146" r="12" fill="#3D9B48"/>
-            <circle cx="56" cy="139" r="9" fill="#52B75E"/>
-          </svg>
-        </div>
-      </div>
-    </div>
+    <div class="lt"><h1>🌿 Meal<b>io</b> · Courses & Menus</h1></div>
     <form class="addcard" id="loginForm">
       <input class="field" id="email" type="email" autocomplete="username" placeholder="E-mail du foyer" required>
       <input class="field" id="pwd" type="password" autocomplete="current-password" placeholder="Mot de passe" required>
@@ -361,75 +236,6 @@ details.others summary::-webkit-details-marker{display:none}
 </div>
 
 <div class="wrap" id="appView" hidden>
-  <!-- BANNIÈRE HERO MEALIO -->
-  <header class="mealio-hero" aria-label="Bannière Mealio">
-    <div class="mealio-wm" aria-hidden="true">MEALIO</div>
-    <div class="hero-top">
-      <span class="brand"><span class="brand-leaf">🌿</span>meal<b>io</b></span>
-      <div class="hero-actions">
-        <button type="button" class="hero-chip" id="heroStoreBtn" title="Changer de magasin">🏪 <span id="heroStoreTxt">Leclerc</span> ▾</button>
-        <button type="button" class="hero-icon-btn" id="heroSearchBtn" aria-label="Rechercher une recette">🔍</button>
-      </div>
-    </div>
-    <div class="hero-body">
-      <div>
-        <span class="hero-badge">🌱 Repas sains, Foyer heureux</span>
-        <h2 class="hero-title">Planifiez vos repas.<span>Savourez chaque bouchée.</span></h2>
-        <p class="hero-sub">Recettes express 4-7 ans & adultes, liste par rayon et prix Lidl vs E.Leclerc.</p>
-        <div class="hero-cta-row">
-          <button type="button" class="hero-cta" id="heroCtaBtn">Idées recettes <i>→</i></button>
-        </div>
-      </div>
-      <div class="hero-art" aria-hidden="true">
-        <svg viewBox="0 0 200 200" fill="none">
-          <circle cx="105" cy="108" r="68" fill="#A8E86C" fill-opacity="0.22"/>
-          <!-- Feuilles décoratives -->
-          <path d="M26 96C26 84 40 78 46 88C52 98 38 108 26 96Z" fill="#7CE063"/>
-          <path d="M168 48C178 42 188 52 180 62C172 72 158 54 168 48Z" fill="#A8E86C"/>
-          <!-- Toque de chef 3D -->
-          <ellipse cx="105" cy="52" rx="44" ry="26" fill="#FFFFFF"/>
-          <circle cx="76" cy="48" r="22" fill="#F2F8F2"/>
-          <circle cx="105" cy="38" r="26" fill="#FFFFFF"/>
-          <circle cx="134" cy="48" r="22" fill="#F2F8F2"/>
-          <rect x="73" y="62" width="64" height="18" rx="6" fill="#E5F0E6"/>
-          <path d="M105 65C105 65 112 58 116 63C120 68 111 75 105 75C99 75 90 68 94 63C98 58 105 65 105 65Z" fill="#2E854A"/>
-          <!-- Cuillère en bois -->
-          <rect x="36" y="72" width="7" height="58" rx="3.5" transform="rotate(-18 36 72)" fill="#C67D3B"/>
-          <ellipse cx="33" cy="65" rx="12" ry="16" transform="rotate(-18 33 65)" fill="#DA924E"/>
-          <!-- Visage du petit chef -->
-          <rect x="74" y="76" width="62" height="54" rx="26" fill="#FFD7BA"/>
-          <path d="M72 88C72 74 88 68 105 68C122 68 138 74 138 88C130 80 118 78 105 78C92 78 80 80 72 88Z" fill="#4A2C1D"/>
-          <circle cx="91" cy="99" r="6.5" fill="#3B2216"/>
-          <circle cx="89" cy="97" r="2.2" fill="#FFFFFF"/>
-          <path d="M113 99C116 94 123 94 126 99" stroke="#3B2216" stroke-width="3.5" stroke-linecap="round"/>
-          <circle cx="82" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
-          <circle cx="128" cy="108" r="5" fill="#FF9E8A" fill-opacity="0.55"/>
-          <path d="M96 111C96 111 100 119 106 119C112 119 116 111 116 111Z" fill="#D94B43"/>
-          <!-- Tablier vert & blanc -->
-          <path d="M76 130H134L140 176H70L76 130Z" fill="#2A7A43"/>
-          <path d="M84 130H126L130 176H80L84 130Z" fill="#F5FAF5"/>
-          <!-- Bol gourmand -->
-          <path d="M104 146H168C168 166 153 179 136 179C119 179 104 166 104 146Z" fill="#FFFFFF"/>
-          <circle cx="122" cy="142" r="9" fill="#63C14B"/>
-          <circle cx="137" cy="139" r="10" fill="#F39C3D"/>
-          <circle cx="152" cy="143" r="8" fill="#E64833"/>
-          <!-- Tomate cerise, brocoli & avocat flottants -->
-          <circle cx="170" cy="92" r="11" fill="#E64833"/>
-          <path d="M167 80L170 84L174 80" stroke="#72D152" stroke-width="2.5" stroke-linecap="round"/>
-          <circle cx="48" cy="148" r="11" fill="#3D9B48"/>
-          <circle cx="57" cy="141" r="9" fill="#52B75E"/>
-          <ellipse cx="156" cy="182" rx="12" ry="9" fill="#89D656" transform="rotate(-15 156 182)"/>
-          <circle cx="156" cy="182" r="4.5" fill="#6E4226"/>
-        </svg>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div class="hstat"><span class="hstat-ico">🍃</span><div><b>25+ Recettes</b>Saines & sans porc</div></div>
-      <div class="hstat"><span class="hstat-ico">👶</span><div><b>Enfants 4-7a</b>& adultes ravis</div></div>
-      <div class="hstat"><span class="hstat-ico">💶</span><div><b>Lidl vs Leclerc</b>Prix comparés</div></div>
-    </div>
-  </header>
-
   <!-- LISTE -->
   <section class="page" id="p-liste" aria-label="Liste de courses">
     <div class="lt"><h1>Ma Liste</h1></div>
@@ -468,13 +274,9 @@ details.others summary::-webkit-details-marker{display:none}
     <div class="sec">
       <div class="sh">
         <span>À acheter <strong id="todoCount" style="font-weight:700;text-transform:none"></strong></span>
-        <span style="display:flex;gap:12px;align-items:center">
-          <button type="button" class="sh-act" id="collapseAllBtn" hidden>Tout réduire</button>
-          <button type="button" class="sh-act" id="sortBtn">Par rayon</button>
-        </span>
       </div>
       <div id="todoWrap"></div>
-      <p class="foot" id="swipeHint">Touche un rayon pour le réduire/déplier. Glisse un article vers la gauche pour le supprimer.</p>
+      <p class="foot" id="swipeHint">Touche un article pour le cocher. Glisse-le vers la gauche pour le supprimer.</p>
     </div>
 
     <div class="sec" id="cartSec" hidden>
@@ -488,7 +290,7 @@ details.others summary::-webkit-details-marker{display:none}
     </div>
   </section>
 
-  <!-- MENUS (STYLE MOBILE MEALIO : CALENDRIER HORIZONTAL + CARTE DU JOUR + 4 CATÉGORIES) -->
+  <!-- MENUS -->
   <section class="page" id="p-menus" aria-label="Menus" hidden>
     <div class="lt"><h1>Menus de la semaine</h1></div>
     <div class="weeknav">
@@ -497,48 +299,20 @@ details.others summary::-webkit-details-marker{display:none}
       <button class="nav" id="wNext" type="button" aria-label="Semaine suivante">›</button>
     </div>
 
-    <!-- Bandeau 7 jours façon Mealio -->
-    <div class="week-strip" id="weekStrip" role="tablist" aria-label="Jours de la semaine"></div>
-
-    <!-- Carte Repas du jour (Today's Meal) -->
-    <div class="today-card" id="todayCard"></div>
-
-    <!-- 4 Cartes Catégories rapides façon Mealio -->
-    <div class="cat-grid" id="mealioCats">
-      <button type="button" class="cat-card" data-cat="Enfants"><div class="cat-ico">👶</div><span>Enfants 4-7a</span></button>
-      <button type="button" class="cat-card" data-cat="Rapide"><div class="cat-ico">⚡</div><span>Express 15m</span></button>
-      <button type="button" class="cat-card" data-cat="Économique"><div class="cat-ico">💶</div><span>Budget</span></button>
-      <button type="button" class="cat-card" data-cat="Végétarien"><div class="cat-ico">🌱</div><span>Végétarien</span></button>
-    </div>
-
     <div class="sec">
-      <div class="sh"><span>Planning complet de la semaine</span><span>Touche un jour pour changer</span></div>
+      <div class="sh"><span>Le soir</span><span>Touche un jour pour choisir</span></div>
       <div class="group" id="days"></div>
     </div>
     <button class="btn primary" id="prepBtn" type="button">🛒 Préparer les courses de la semaine →</button>
   </section>
 
-  <!-- PLATS -->
-  <section class="page" id="p-plats" aria-label="Plats" hidden>
-    <div class="lt"><h1>Catalogue de Plats</h1><button class="act" id="newPlat" type="button">+ Nouveau</button></div>
-    <input class="field" id="platSearch" style="background:var(--surface)" placeholder="🔍 Rechercher un plat ou un ingrédient (ex. saumon, œufs…)" aria-label="Rechercher un plat">
-    <div class="stores" id="platTags"></div>
-    <div class="sec">
-      <div class="group" id="plats"></div>
-      <p class="foot">Touche un plat pour voir sa fiche recette, ajuster les portions ou lancer le mode « Cuisiner pas à pas ».</p>
-    </div>
-    <button class="logout" id="logout" type="button">Se déconnecter</button>
-  </section>
-
-  <!-- RECETTES (en quelques lignes ou détaillées) -->
+  <!-- RECETTES -->
   <section class="page" id="p-recettes" aria-label="Recettes" hidden>
-    <div class="lt">
-      <h1>Idées Recettes</h1>
-      <button class="act" id="recModeBtn" type="button">Vue : En 3 lignes ⚡</button>
-    </div>
-    <input class="field" id="recSearch" style="background:var(--surface)" placeholder="🔍 Plat ou ingrédient (ex. saumon, poulet, courgettes…)" aria-label="Rechercher une recette">
-    <div class="stores" id="recTags"></div>
-    <div class="rec-cards" id="recList"></div>
+    <div class="lt"><h1>Recettes</h1><button class="act" id="newPlat" type="button">+ Nouvelle</button></div>
+    <input class="field" id="platSearch" style="background:var(--surface)" placeholder="🔍 Plat ou ingrédient (ex. saumon, poulet…)" aria-label="Rechercher une recette">
+    <div class="stores" id="platTags"></div>
+    <div class="group" id="plats"></div>
+    <button class="logout" id="logout" type="button">Se déconnecter</button>
   </section>
 </div>
 
@@ -546,15 +320,10 @@ details.others summary::-webkit-details-marker{display:none}
   <button class="tab" role="tab" data-p="liste" aria-selected="true">
     <span class="tab-badge" id="tabBadge" hidden>0</span>
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5 14 5l9 7.5v9.5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-9.5Z"/><path d="M11 24v-7h6v7"/></svg>Liste</button>
-  <button class="tab" role="tab" data-p="recettes" aria-selected="false">
-    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H22v19H7.5A2.5 2.5 0 0 0 5 24.5v-19Z"/><path d="M5 22a2.5 2.5 0 0 1 2.5-2.5H22"/><path d="M9.5 8.5h8M9.5 12.5h8M9.5 16.5h5"/></svg>Recettes</button>
-  <div class="fab-wrap">
-    <button type="button" class="fab-add" id="fabAddBtn" aria-label="Action rapide">+</button>
-  </div>
   <button class="tab" role="tab" data-p="menus" aria-selected="false">
     <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="20" height="18" rx="3"/><path d="M4 11h20M9 3.5v5M19 3.5v5"/></svg>Menus</button>
-  <button class="tab" role="tab" data-p="plats" aria-selected="false">
-    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3.5v8a2.5 2.5 0 0 0 5 0v-8M10.5 3.5V25"/><path d="M20 25V3.5c-2.5 1.5-3.5 4.5-3.5 8.5 0 2 1.2 3 3.5 3"/></svg>Plats</button>
+  <button class="tab" role="tab" data-p="recettes" aria-selected="false">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3.5v8a2.5 2.5 0 0 0 5 0v-8M10.5 3.5V25"/><path d="M20 25V3.5c-2.5 1.5-3.5 4.5-3.5 8.5 0 2 1.2 3 3.5 3"/></svg>Recettes</button>
 </nav>
 
 <div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
@@ -1011,9 +780,7 @@ function enrichPlat(p){
 
 let items=[], produits={}, plats=[], menus={}, extraStores=[], seeding=false;
 let store=ls.get("courses.magasin","Leclerc"), tab="liste", week=weekStart(new Date());
-let sortByRayon=ls.get("courses.tri","rayon")==="rayon";
-let collapsedRayons=new Set((ls.get("courses.rayons.fermes","")||"").split(",").filter(Boolean));
-let activeTag="", platQuery="", recTag="", recQuery="", recShortMode=true;
+let activeTag="", platQuery="";
 const allStores=()=>[...BASE_STORES,...extraStores.filter(s=>!BASE_STORES.includes(s))];
 const priceOf=(key,s)=>{
   const saved=produits[key]?.prix?.[s];
@@ -1057,32 +824,14 @@ $("overlay").onclick=e=>{ if(e.target===$("overlay")||e.target.closest("[data-cl
   else if(e.target.closest("[data-save]")&&sheetSave) sheetSave(); };
 $("sheet").addEventListener("keydown",e=>{ if(e.key==="Enter"&&e.target.matches("input:not([type=checkbox])")&&sheetSave){e.preventDefault();sheetSave()} });
 
-// --- Onglets & Actions Bannière Mealio ---
+// --- Onglets ---
 function setTab(t){tab=t;
   $("tabbar").querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.p===t));
-  ["liste","menus","plats","recettes"].forEach(p=>$("p-"+p).hidden=p!==t); render(); window.scrollTo(0,0)}
+  ["liste","menus","recettes"].forEach(p=>$("p-"+p).hidden=p!==t); render(); window.scrollTo(0,0)}
 $("tabbar").onclick=e=>{const b=e.target.closest(".tab");if(b)setTab(b.dataset.p)};
-$("heroCtaBtn").onclick=()=>setTab("recettes");
-$("heroSearchBtn").onclick=()=>{setTab("recettes");setTimeout(()=>$("recSearch")?.focus(),60)};
-$("heroStoreBtn").onclick=()=>{
-  const list=allStores(), idx=(list.indexOf(store)+1)%list.length;
-  store=list[idx]||"Leclerc"; ls.set("courses.magasin",store); render();
-  toast(`Magasin actif : ${store}`);
-};
-$("fabAddBtn").onclick=()=>{
-  if(tab==="liste"){
-    $("addForm")?.scrollIntoView({behavior:"smooth",block:"center"});
-    setTimeout(()=>$("addName")?.focus(),120);
-  } else if(tab==="menus"){
-    openDay(selDayKey||localDate(new Date()));
-  } else {
-    openEditPlat(null);
-  }
-};
 
 // --- Magasins ---
 function renderStores(){
-  if($("heroStoreTxt")) $("heroStoreTxt").textContent=store;
   $("stores").innerHTML=allStores().map(s=>`<button type="button" class="pill" data-s="${esc(s)}" aria-pressed="${s===store}">${esc(s)}</button>`).join("")
     +`<button type="button" class="pill dash" data-s="__new">+ Autre</button>`;
 }
@@ -1157,20 +906,7 @@ function renderOften(){
 }
 $("often").onclick=e=>{const b=e.target.closest(".chip");if(!b)return;const r=addItem(b.dataset.n,{qty:1});if(r)toast(`${r.nom} ajouté`)};
 
-// --- Liste & Tri par Rayons pliables (façon Jow) ---
-function saveCollapsed(){ ls.set("courses.rayons.fermes",[...collapsedRayons].join(",")); }
-$("sortBtn").onclick=()=>{
-  sortByRayon=!sortByRayon;
-  ls.set("courses.tri",sortByRayon?"rayon":"ajout");
-  renderList();
-};
-$("collapseAllBtn").onclick=()=>{
-  const activeRayons=new Set(items.filter(i=>!i.coche).map(i=>rayonOf(i.key)));
-  const allClosed=[...activeRayons].every(rid=>collapsedRayons.has(rid));
-  if(allClosed) collapsedRayons.clear();
-  else activeRayons.forEach(rid=>collapsedRayons.add(rid));
-  saveCollapsed(); renderList();
-};
+// --- Liste classée par rayon ---
 function rowHtml(i){
   const p=priceOf(i.key,store), q=Q(i);
   return `<div class="row${i.coche?" done":""}" data-id="${i.id}">
@@ -1192,38 +928,15 @@ function renderList(){
   $("todoCount").textContent=todo.length?`· ${plural(totalTodo,"article")}`:"";
   $("tabBadge").hidden=!totalTodo;
   $("tabBadge").textContent=totalTodo;
-  $("sortBtn").textContent=sortByRayon?"Tri : Par rayon 🥬":"Tri : Ordre d'ajout 🕒";
-  $("sortBtn").hidden=todo.length<2;
 
   if(!todo.length){
-    $("collapseAllBtn").hidden=true;
     $("todoWrap").innerHTML=`<div class="group"><p class="empty">${cart.length?"Tout est dans le panier 🎉":"Ta liste est vide. Tape un article ci-dessus, ou prépare la semaine depuis l'onglet Menus."}</p></div>`;
-  } else if(sortByRayon){
-    const byR=new Map();
-    RAYONS.forEach(r=>byR.set(r.id,[]));
-    todo.forEach(i=>{
-      const rid=rayonOf(i.key);
-      (byR.get(rid)||byR.get("au")).push(i);
-    });
-    const activeR=RAYONS.filter(r=>(byR.get(r.id)||[]).length>0);
-    const allClosed=activeR.length>0&&activeR.every(r=>collapsedRayons.has(r.id));
-    $("collapseAllBtn").hidden=activeR.length<2;
-    $("collapseAllBtn").textContent=allClosed?"Tout déplier":"Tout réduire";
-    const sections=[];
-    activeR.forEach(r=>{
-      const arr=byR.get(r.id)||[], closed=collapsedRayons.has(r.id);
-      sections.push(`<div class="aisle${closed?" closed":""}">
-        <button type="button" class="aisle-hd" data-toggle-r="${r.id}" aria-expanded="${!closed}">
-          <span>${r.ico} ${esc(r.nom)}</span>
-          <small>${plural(n(arr),"article")} <span class="aisle-chev">▾</span></small>
-        </button>
-        <div class="group" ${closed?"hidden":""}>${arr.map(rowHtml).join("")}</div>
-      </div>`);
-    });
-    $("todoWrap").innerHTML=`<div class="aisles">${sections.join("")}</div>`;
   } else {
-    $("collapseAllBtn").hidden=true;
-    $("todoWrap").innerHTML=`<div class="group">${todo.map(rowHtml).join("")}</div>`;
+    $("todoWrap").innerHTML=`<div class="aisles">${RAYONS.map(r=>{
+      const arr=todo.filter(i=>rayonOf(i.key)===r.id); if(!arr.length) return "";
+      return `<div class="aisle"><div class="aisle-hd"><span>${r.ico} ${esc(r.nom)}</span><small>${plural(n(arr),"article")}</small></div>
+        <div class="group">${arr.map(rowHtml).join("")}</div></div>`;
+    }).join("")}</div>`;
   }
 
   $("swipeHint").hidden=!todo.length;
@@ -1262,12 +975,6 @@ function removeItem(id){
 }
 const onListClick=e=>{
   if(Date.now()-lastSwipe<400) return;
-  const tr=e.target.closest("[data-toggle-r]");
-  if(tr){
-    const rid=tr.dataset.toggleR;
-    if(collapsedRayons.has(rid)) collapsedRayons.delete(rid); else collapsedRayons.add(rid);
-    saveCollapsed(); renderList(); return;
-  }
   const a=e.target.closest("[data-act]"); const row=e.target.closest(".row"); if(!row) return;
   if(row.classList.contains("open")&&a?.dataset.act!=="del"){closeRows();return}
   if(!a) return; const i=items.find(x=>x.id===row.dataset.id); if(!i) return;
@@ -1353,88 +1060,12 @@ $("finishBtn").onclick=()=>{
   const f=$("tTotal"); f.focus(); f.select();
 };
 
-// --- Menus (le soir) + Calendrier horizontal & Carte Repas du jour façon Mealio ---
+// --- Menus (le soir) ---
 const weekDays=()=>Array.from({length:7},(_,i)=>addDays(week,i));
-let selDayKey=localDate(new Date());
 function platOf(m){return m?.platId?plats.find(p=>p.id===m.platId)||null:null}
 function renderMenus(){
   const days=weekDays(), today=localDate(new Date());
-  const keys=days.map(localDate);
-  if(!keys.includes(selDayKey)) selDayKey=keys.includes(today)?today:keys[0];
   $("wLbl").textContent=`Semaine du ${days[0].toLocaleDateString("fr-FR",{day:"numeric",month:"long"})}`;
-
-  // Bandeau horizontal 7 jours façon Mealio (Mon 21 .. Sun 27)
-  if($("weekStrip")){
-    $("weekStrip").innerHTML=days.map(d=>{
-      const k=localDate(d), m=menus[k], has=!!(platOf(m)||m?.texte);
-      const wd=d.toLocaleDateString("fr-FR",{weekday:"short"}).replace(".","");
-      return `<button type="button" class="day-pill${has?" has-meal":""}" role="tab" data-d="${k}" aria-selected="${k===selDayKey}">
-        <span>${esc(wd)}</span>
-        <b>${d.getDate()}</b>
-      </button>`;
-    }).join("");
-  }
-
-  // Carte "Repas du jour" (Today's Meal) façon Mealio
-  if($("todayCard")){
-    const selDate=new Date(selDayKey+"T12:00");
-    const dayTitle=selDayKey===today?"Repas d'aujourd'hui":`Repas du ${selDate.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"short"})}`;
-    const m=menus[selDayKey], p=platOf(m), pers=m?.portions||p?.portions||4;
-    if(p){
-      const cLidl=platCost(p,"Lidl"), cLec=platCost(p,"Leclerc");
-      $("todayCard").innerHTML=`
-        <div class="sh" style="padding:0"><span>${esc(dayTitle)}</span><button type="button" class="sh-act" data-pick="${selDayKey}">Changer →</button></div>
-        <div class="today-banner">
-          <div class="today-info">
-            <div class="today-kicker">🌱 Menu planifié</div>
-            <h3 class="today-title">${esc(p.nom)}</h3>
-            <div class="today-meta">
-              ${p.temps?`<span>⏱ ${p.temps} min</span>`:""}
-              <span>🍽️ ${pers} pers.</span>
-              ${cLidl?`<span>Lidl ≈ ${fmt(cLidl)}</span>`:""}
-              ${cLec?`<span>Leclerc ≈ ${fmt(cLec)}</span>`:""}
-            </div>
-          </div>
-          <div class="today-plate">${p.emoji||"🍽️"}</div>
-        </div>
-        <div class="today-foot">
-          <button type="button" class="view-rec-btn pri" data-cook="${p.id}" data-pers="${pers}">👨‍🍳 Cuisiner pas à pas</button>
-          <button type="button" class="view-rec-btn" data-fiche="${p.id}" data-pers="${pers}">Voir la recette →</button>
-        </div>`;
-    } else if(m?.texte){
-      $("todayCard").innerHTML=`
-        <div class="sh" style="padding:0"><span>${esc(dayTitle)}</span><button type="button" class="sh-act" data-pick="${selDayKey}">Modifier →</button></div>
-        <div class="today-banner">
-          <div class="today-info">
-            <div class="today-kicker">📝 Note repas</div>
-            <h3 class="today-title">${esc(m.texte)}</h3>
-            <div class="today-meta"><span>🍽️ ${pers} pers.</span></div>
-          </div>
-          <div class="today-plate">🍽️</div>
-        </div>`;
-    } else {
-      const suggList=plats.length?plats:BASE_PLATS;
-      const dayIdx=Math.max(0,keys.indexOf(selDayKey));
-      const sugg=suggList[dayIdx%suggList.length];
-      $("todayCard").innerHTML=`
-        <div class="sh" style="padding:0"><span>${esc(dayTitle)}</span><button type="button" class="sh-act" data-pick="${selDayKey}">Tous les plats →</button></div>
-        <div class="today-banner">
-          <div class="today-info">
-            <div class="today-kicker">✨ Suggestion du chef</div>
-            <h3 class="today-title">${sugg?esc(sugg.nom):"Choisir un repas"}</h3>
-            <div class="today-meta">
-              ${sugg?.temps?`<span>⏱ ${sugg.temps} min</span>`:""}
-              <span>👶 Enfants & adultes</span>
-            </div>
-          </div>
-          <div class="today-plate">${sugg?.emoji||"🥗"}</div>
-        </div>
-        <div class="today-foot">
-          ${sugg?`<button type="button" class="view-rec-btn pri" data-quickplan="${sugg.id}" data-d="${selDayKey}">+ Planifier ce plat</button>`:""}
-          <button type="button" class="view-rec-btn" data-pick="${selDayKey}">Choisir un autre →</button>
-        </div>`;
-    }
-  }
 
   $("days").innerHTML=days.map(d=>{
     const k=localDate(d), m=menus[k], p=platOf(m), label=p?p.nom:(m?.texte||"");
@@ -1454,53 +1085,22 @@ function renderMenus(){
 }
 $("wPrev").onclick=()=>{week=addDays(week,-7);renderMenus()};
 $("wNext").onclick=()=>{week=addDays(week,7);renderMenus()};
-$("weekStrip")?.addEventListener("click",e=>{
-  const b=e.target.closest("[data-d]"); if(!b) return;
-  if(selDayKey===b.dataset.d) openDay(selDayKey);
-  else { selDayKey=b.dataset.d; renderMenus(); }
-});
-$("todayCard")?.addEventListener("click",e=>{
-  const pk=e.target.closest("[data-pick]");
-  if(pk){ openDay(pk.dataset.pick); return; }
-  const qp=e.target.closest("[data-quickplan]");
-  if(qp){
-    const p=(plats.length?plats:BASE_PLATS).find(x=>x.id===qp.dataset.quickplan);
-    if(p){
-      fs.collection("menus").doc(qp.dataset.d).set({platId:p.id,texte:p.nom,portions:p.portions||4}).catch(fail("Enregistrement"));
-      toast(`${p.nom} planifié !`);
-    }
-    return;
-  }
-  const ck=e.target.closest("[data-cook]");
-  if(ck){ const p=plats.find(x=>x.id===ck.dataset.cook); if(p) openCookMode(p,+ck.dataset.pers||p.portions||4); return; }
-  const fi=e.target.closest("[data-fiche]");
-  if(fi){ const p=plats.find(x=>x.id===fi.dataset.fiche); if(p) openFichePlat(p,+fi.dataset.pers||p.portions||4); }
-});
-$("mealioCats")?.addEventListener("click",e=>{
-  const b=e.target.closest("[data-cat]"); if(!b) return;
-  recTag=b.dataset.cat; setTab("recettes");
-});
 $("days").onclick=e=>{
   const ck=e.target.closest("[data-cook]");
-  if(ck){ const p=plats.find(x=>x.id===ck.dataset.cook); if(p) openFichePlat(p,+ck.dataset.pers||p.portions||4); return; }
-  const b=e.target.closest(".day"); if(b){ selDayKey=b.dataset.d; renderMenus(); openDay(b.dataset.d); }
+  if(ck){ const p=plats.find(x=>x.id===ck.dataset.cook); if(p) openCookMode(p,+ck.dataset.pers||p.portions||4); return; }
+  const b=e.target.closest(".day"); if(b) openDay(b.dataset.d);
 };
 function openDay(k){
   const m=menus[k], d=new Date(k+"T12:00"), curPlat=platOf(m);
-  let pers=m?.portions||curPlat?.portions||4, dayTag="";
+  let pers=m?.portions||curPlat?.portions||4;
   const list=plats.slice().sort((a,b)=>a.nom.localeCompare(b.nom,"fr"));
   openSheet(`<h3 style="text-transform:capitalize">${d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}</h3>
     <div class="serv-bar">
       <span>🍽️ Nombre de personnes</span>
       <div class="qty"><button type="button" id="dMinus">−</button><b id="dPers">${pers}</b><button type="button" id="dPlus">+</button></div>
     </div>
-    ${list.length?`
-      <div class="stores" id="dTags">
-        <button type="button" class="pill sm" data-t="" aria-pressed="true">Tous</button>
-        ${ALL_TAGS.map(t=>`<button type="button" class="pill sm" data-t="${t.id}" aria-pressed="false">${t.lbl}</button>`).join("")}
-      </div>
-      <div class="dchips" id="dPlats"></div>`
-      :`<p class="note">Aucun plat enregistré. Crée tes plats dans l'onglet Plats.</p>`}
+    ${list.length?`<div class="dchips" id="dPlats">${list.map(p=>`<button type="button" class="chip" data-id="${p.id}" aria-pressed="${m?.platId===p.id}">${p.emoji||"🍽️"} ${esc(p.nom)}</button>`).join("")}</div>`
+      :`<p class="note">Aucune recette enregistrée. Crée-en une dans l'onglet Recettes.</p>`}
     <input class="field" id="dText" style="background:var(--surface)" placeholder="Autre chose (Restes, Resto…)" value="${m&&!m.platId?esc(m.texte||""):""}" autocapitalize="sentences" aria-label="Autre repas">
     <div class="btns"><button type="button" class="btn danger" id="dClear">Vider</button><button type="button" class="btn primary" data-save>Enregistrer</button></div>`,
   ()=>{const t=$("dText").value.trim();
@@ -1508,20 +1108,8 @@ function openDay(k){
     else if(m?.platId) fs.collection("menus").doc(k).set({platId:m.platId,texte:curPlat?.nom||m.texte,portions:pers}).catch(fail("Enregistrement"));
     closeSheet()});
 
-  const drawChips=()=>{
-    const box=$("dPlats"); if(!box) return;
-    const flt=dayTag?list.filter(p=>(p.tags||[]).includes(dayTag)):list;
-    box.innerHTML=flt.map(p=>`<button type="button" class="chip" data-id="${p.id}" aria-pressed="${m?.platId===p.id}">${p.emoji||"🍽️"} ${esc(p.nom)}${p.temps?` <small style="opacity:.7">· ${p.temps}m</small>`:""}</button>`).join("");
-  };
-  drawChips();
   $("dMinus").onclick=()=>{if(pers>1){pers--;$("dPers").textContent=pers}};
   $("dPlus").onclick=()=>{if(pers<20){pers++;$("dPers").textContent=pers}};
-  $("dTags")?.addEventListener("click",e=>{
-    const b=e.target.closest("[data-t]"); if(!b) return;
-    dayTag=b.dataset.t;
-    $("dTags").querySelectorAll("[data-t]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.t===dayTag));
-    drawChips();
-  });
   $("dPlats")?.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;const p=plats.find(x=>x.id===b.dataset.id);if(!p)return;
     fs.collection("menus").doc(k).set({platId:p.id,texte:p.nom,portions:pers}).catch(fail("Enregistrement")); closeSheet()});
   $("dClear").onclick=()=>{ if(m) fs.collection("menus").doc(k).delete().catch(fail("Suppression")); closeSheet() };
@@ -1587,7 +1175,7 @@ $("prepBtn").onclick=()=>{
   $("prepList").onchange=upd; upd();
 };
 
-// --- Plats : Catalogue Marmiton/Jow, Fiche Recette & Mode Cuisiner pas à pas ---
+// --- Recettes : liste, fiche & mode Cuisiner pas à pas ---
 function renderPlatTags(){
   $("platTags").innerHTML=`<button type="button" class="pill sm" data-t="" aria-pressed="${!activeTag}">Tous</button>`
     +ALL_TAGS.map(t=>`<button type="button" class="pill sm" data-t="${t.id}" aria-pressed="${activeTag===t.id}">${t.lbl}</button>`).join("");
@@ -1620,13 +1208,11 @@ function renderPlats(){
       <span class="pl-meta">
         ${p.temps?`<span class="tag-badge${p.temps<=20?" fast":""}">⏱ ${p.temps} min</span>`:""}
         ${cost?`<span class="tag-badge">💶 ≈ ${fmt(cost)}</span>`:""}
-        ${(p.tags||[]).map(t=>`<span class="tag-badge">${esc(t)}</span>`).join("")}
-        <span>${plural((p.ingredients||[]).length,"ingr.")}${p.etapes?.length?` · ${p.etapes.length} étapes`:""}</span>
       </span>
     </div>
     <small>›</small>
   </button>`}).join("")
-    :`<p class="empty">${platQuery||activeTag?"Aucun plat ne correspond à ta recherche.":"Aucun plat. Touche « + Nouveau » pour en créer un."}</p>`;
+    :`<p class="empty">${platQuery||activeTag?"Aucune recette ne correspond.":"Aucune recette. Touche « + Nouvelle » pour en créer une."}</p>`;
 }
 $("newPlat").onclick=()=>openEditPlat(null);
 $("plats").onclick=e=>{const b=e.target.closest("[data-id]");if(b){const p=plats.find(x=>x.id===b.dataset.id);if(p)openFichePlat(p)}};
@@ -1654,7 +1240,6 @@ function openFichePlat(p,initPers){
           ${p.temps?`<span class="tag-badge${p.temps<=20?" fast":""}">⏱ ${p.temps} min</span>`:""}
           ${platCost(p,"Lidl")?`<span class="tag-badge">Lidl ≈ ${fmt(platCost(p,"Lidl"))}</span>`:""}
           ${platCost(p,"Leclerc")?`<span class="tag-badge">Leclerc ≈ ${fmt(platCost(p,"Leclerc"))}</span>`:""}
-          ${(p.tags||[]).map(t=>`<span class="tag-badge">${esc(t)}</span>`).join("")}
         </div>
       </div>
     </div>
@@ -1669,13 +1254,8 @@ function openFichePlat(p,initPers){
       <div class="ing-list" id="rIngs"></div>
     </div>
 
-    ${(p.resume&&p.resume.length)?`<div class="sec">
-      <div class="sh" style="padding:0 4px"><span>⚡ En bref (en 3 lignes)</span></div>
-      <div class="rcard-short" style="background:var(--surface)">${p.resume.map((ln,idx)=>`<div><b>${idx+1}.</b><span>${esc(ln)}</span></div>`).join("")}</div>
-    </div>`:""}
-
     <div class="sec">
-      <div class="sh" style="padding:0 4px"><span>📖 Préparation détaillée</span></div>
+      <div class="sh" style="padding:0 4px"><span>📖 Préparation</span></div>
       ${(p.etapes&&p.etapes.length)?`<div class="steps-box">${p.etapes.map((st,idx)=>`<div class="step-item"><span class="step-num">${idx+1}</span><span>${esc(st)}</span></div>`).join("")}</div>`
         :`<p class="empty" style="background:var(--surface);border-radius:12px">Aucune étape rédigée pour ce plat. Touche « Modifier » pour ajouter la recette.</p>`}
     </div>
@@ -1824,76 +1404,6 @@ function openEditPlat(p){
     fs.collection("plats").doc(p.id).delete().catch(fail("Suppression")); closeSheet(); toast(`${p.nom} supprimé`)}}
 }
 
-// --- Onglet Recettes (Vue rapide en 3 lignes ou Vue détaillée) ---
-$("recModeBtn").onclick=()=>{
-  recShortMode=!recShortMode;
-  $("recModeBtn").textContent=recShortMode?"Vue : En 3 lignes ⚡":"Vue : Détaillée 📖";
-  renderRecettes();
-};
-$("recTags").onclick=e=>{
-  const b=e.target.closest("[data-t]"); if(!b) return;
-  recTag=b.dataset.t; renderRecettes();
-};
-$("recSearch").addEventListener("input",e=>{ recQuery=e.target.value; renderRecettes(); });
-
-function renderRecettes(){
-  $("recTags").innerHTML=`<button type="button" class="pill sm" data-t="" aria-pressed="${!recTag}">Tous</button>`
-    +ALL_TAGS.map(t=>`<button type="button" class="pill sm" data-t="${t.id}" aria-pressed="${recTag===t.id}">${t.lbl}</button>`).join("");
-  const q=keyOf(recQuery);
-  const list=plats.slice().filter(p=>{
-    if(recTag&&!(p.tags||[]).includes(recTag)) return false;
-    if(q&&q!=="article"){
-      const inNom=keyOf(p.nom).includes(q);
-      const inIng=(p.ingredients||[]).some(i=>keyOf(i).includes(q));
-      if(!inNom&&!inIng) return false;
-    }
-    return true;
-  }).sort((a,b)=>(a.temps||99)-(b.temps||99)||a.nom.localeCompare(b.nom,"fr"));
-
-  if(!list.length){
-    $("recList").innerHTML=`<div class="group"><p class="empty">Aucune recette ne correspond à ce filtre.</p></div>`;
-    return;
-  }
-  $("recList").innerHTML=list.map(p=>{
-    const cLidl=platCost(p,"Lidl"), cLec=platCost(p,"Leclerc");
-    const lines=recShortMode?(p.resume?.length?p.resume:(p.etapes||[]).slice(0,3)):(p.etapes||[]);
-    const ings=(p.ingredients||[]).map(raw=>{const x=parseEntry(raw);return x.detail?`${x.nom} (${x.detail})`:x.qty>1?`${x.qty} ${x.nom}`:x.nom}).join(" · ");
-    return `<article class="rcard" data-id="${p.id}">
-      <div class="rcard-top" data-act="fiche">
-        <div style="min-width:0;flex:1">
-          <div class="rcard-title"><span class="rcard-emo">${p.emoji||"🍽️"}</span><span>${esc(p.nom)}</span></div>
-          <div class="pl-meta" style="margin-top:5px">
-            ${p.temps?`<span class="tag-badge${p.temps<=20?" fast":""}">⏱ ${p.temps} min</span>`:""}
-            ${cLidl?`<span class="tag-badge">Lidl ≈ ${fmt(cLidl)}</span>`:""}
-            ${cLec?`<span class="tag-badge">Leclerc ≈ ${fmt(cLec)}</span>`:""}
-            ${(p.tags||[]).map(t=>`<span class="tag-badge">${t==="Enfants"?"👶 4-7 ans":esc(t)}</span>`).join("")}
-          </div>
-        </div>
-      </div>
-      <div class="rcard-ings"><b>Ingrédients (${p.portions||4} pers.) :</b> ${esc(ings)}</div>
-      ${lines.length?`<div class="rcard-short">${lines.map((ln,idx)=>`<div><b>${idx+1}.</b><span>${esc(ln)}</span></div>`).join("")}</div>`:""}
-      <div class="rcard-acts">
-        <button type="button" class="rcard-btn pri" data-act="cook">👨‍🍳 Pas à pas</button>
-        <button type="button" class="rcard-btn" data-act="add">+ Courses</button>
-        <button type="button" class="rcard-btn" data-act="fiche">🍽️ Portions / Détails</button>
-      </div>
-    </article>`;
-  }).join("");
-}
-$("recList").onclick=e=>{
-  const card=e.target.closest(".rcard"); if(!card) return;
-  const p=plats.find(x=>x.id===card.dataset.id); if(!p) return;
-  const act=e.target.closest("[data-act]")?.dataset.act;
-  if(act==="cook") openCookMode(p,p.portions||4);
-  else if(act==="add"){
-    (p.ingredients||[]).forEach(raw=>{
-      const parsed=parseEntry(raw);
-      addItem(parsed.nom,{qty:parsed.unit?1:parsed.qty,detail:parsed.detail||null,pour:p.nom});
-    });
-    toast(`Ingrédients pour ${p.nom} ajoutés à la liste`);
-  } else if(act==="fiche") openFichePlat(p);
-};
-
 // Ajoute ou enrichit une seule fois les 25 plats de base + les 118 prix E.Leclerc et Lidl dans Firestore
 function seedBasePlats(){
   if(seeding) return; seeding=true;
@@ -1916,7 +1426,7 @@ function seedBasePlats(){
 
 function render(){
   renderStores(); renderOften();
-  if(tab==="liste") renderList(); else if(tab==="menus") renderMenus(); else if(tab==="plats") renderPlats(); else renderRecettes();
+  if(tab==="liste") renderList(); else if(tab==="menus") renderMenus(); else renderPlats();
 }
 
 // --- Données en direct ---
