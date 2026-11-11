@@ -778,10 +778,11 @@ function enrichPlat(p){
   };
 }
 
-let items=[], produits={}, plats=[], menus={}, extraStores=[], seeding=false;
+let items=[], produits={}, plats=[], menus={}, extraStores=[], storeList=null, seeding=false;
 let store=ls.get("courses.magasin","Leclerc"), tab="liste", week=weekStart(new Date());
 let activeTag="", platQuery="";
-const allStores=()=>[...BASE_STORES,...extraStores.filter(s=>!BASE_STORES.includes(s))];
+const allStores=()=>storeList&&storeList.length?storeList:[...BASE_STORES,...extraStores.filter(s=>!BASE_STORES.includes(s))];
+const saveStores=list=>{storeList=list;return fs.collection("reglages").doc("courses").set({listeMagasins:list},{merge:true}).catch(fail("Enregistrement des magasins"))};
 const priceOf=(key,s)=>{
   const saved=produits[key]?.prix?.[s];
   if(saved) return saved;
@@ -833,14 +834,46 @@ $("tabbar").onclick=e=>{const b=e.target.closest(".tab");if(b)setTab(b.dataset.p
 // --- Magasins ---
 function renderStores(){
   $("stores").innerHTML=allStores().map(s=>`<button type="button" class="pill" data-s="${esc(s)}" aria-pressed="${s===store}">${esc(s)}</button>`).join("")
-    +`<button type="button" class="pill dash" data-s="__new">+ Autre</button>`;
+    +`<button type="button" class="pill dash" data-s="__new">+ Ajouter</button><button type="button" class="pill dash" data-s="__edit">✏️ Modifier</button>`;
 }
 $("stores").onclick=e=>{const b=e.target.closest(".pill");if(!b)return;
+  if(b.dataset.s==="__edit"){openStoresEdit();return}
   if(b.dataset.s==="__new"){$("storeForm").hidden=!$("storeForm").hidden;if(!$("storeForm").hidden)$("storeName").focus();return}
   store=b.dataset.s;ls.set("courses.magasin",store);render()};
 $("storeForm").onsubmit=e=>{e.preventDefault();const s=$("storeName").value.trim();if(!s)return;
-  if(!allStores().includes(s)){ fs.collection("reglages").doc("courses").set({magasins:FV.arrayUnion(s)},{merge:true}).catch(fail("Ajout du magasin")); extraStores=[...extraStores,s]; }
+  if(!allStores().includes(s)) saveStores([...allStores(),s]);
   store=s;ls.set("courses.magasin",s);$("storeName").value="";$("storeForm").hidden=true;render()};
+
+// Modifier / supprimer les magasins (renommer garde les prix déjà notés)
+function openStoresEdit(){
+  const old=allStores(), gone=new Set();
+  openSheet(`<h3>Mes magasins</h3>
+    <p class="note">Renomme un magasin ou supprime-le avec 🗑.</p>
+    <div class="sec" id="stEdit">${old.map((n,i)=>`<div class="inline" data-i="${i}"><input class="field" value="${esc(n)}" aria-label="Nom du magasin"><button type="button" class="btn danger" data-del="${i}" aria-label="Supprimer ${esc(n)}">🗑</button></div>`).join("")}</div>
+    <div class="btns"><button type="button" class="btn" data-close>Annuler</button><button type="button" class="btn primary" data-save>Enregistrer</button></div>`,
+  ()=>{
+    const rows=[...$("stEdit").querySelectorAll("[data-i]")].filter(r=>!gone.has(+r.dataset.i)).map(r=>({old:old[+r.dataset.i],nom:r.querySelector("input").value.trim()}));
+    if(!rows.length){toast("Garde au moins un magasin.",{err:true});return}
+    if(rows.some(r=>!r.nom)){toast("Un magasin n'a pas de nom.",{err:true});return}
+    if(new Set(rows.map(r=>r.nom.toLowerCase())).size<rows.length){toast("Deux magasins ont le même nom.",{err:true});return}
+    const ren=rows.filter(r=>r.nom!==r.old);
+    if(ren.length){ // les prix suivent le nouveau nom
+      const todo=Object.entries(produits).filter(([k,p])=>ren.some(r=>p.prix?.[r.old]));
+      for(let i=0;i<todo.length;i+=400){
+        const b=fs.batch();
+        todo.slice(i,i+400).forEach(([k,p])=>{const prix={};
+          ren.forEach(r=>{if(p.prix?.[r.old]){prix[r.nom]=p.prix[r.old];prix[r.old]=FV.delete()}});
+          b.set(fs.collection("produits").doc(k),{prix},{merge:true})});
+        b.commit().catch(fail("Renommage"));
+      }
+    }
+    const cur=rows.find(r=>r.old===store);
+    store=cur?cur.nom:rows[0].nom; ls.set("courses.magasin",store);
+    saveStores(rows.map(r=>r.nom)); closeSheet(); render(); toast("Magasins mis à jour");
+  });
+  $("stEdit").onclick=e=>{const b=e.target.closest("[data-del]");if(!b)return;
+    gone.add(+b.dataset.del); b.closest("[data-i]").hidden=true};
+}
 
 // --- Ajout : article + prix en une fois ---
 function savePrice(key,nom,c,rayon){
@@ -1450,7 +1483,7 @@ function start(){
   unsub.push(fs.collection("plats").onSnapshot(s=>{plats=map(s).map(enrichPlat).filter(p=>!/jambon|lardon/i.test(p.nom+" "+(p.ingredients||[]).join(" ")));render();done()},err));
   unsub.push(fs.collection("menus").onSnapshot(s=>{menus=Object.fromEntries(s.docs.map(d=>[d.id,d.data()]));render();done()},err));
   unsub.push(fs.collection("reglages").doc("courses").onSnapshot(d=>{
-    const x=d.exists?d.data():{}; extraStores=x.magasins||[]; render()},()=>{}));
+    const x=d.exists?d.data():{}; extraStores=x.magasins||[]; storeList=Array.isArray(x.listeMagasins)?x.listeMagasins:null; render()},()=>{}));
   // Plats de base enrichis (v2) + Recettes Jow sans jambon + Prix E.Leclerc & Lidl : on vérifie en ligne s'ils ont déjà été ajoutés
   fs.collection("reglages").doc("courses").get({source:"server"})
     .then(d=>{ if(!(d.exists&&d.data().basePlatsV2&&d.data().leclercPricesV1&&d.data().lidlPricesV1&&d.data().kidsRecipesV1&&d.data().noHamJowV1)) seedBasePlats(); })
